@@ -24,5 +24,6 @@ npm run dev
 
 +++ ADD POTENTIAL IMPROVEMENTS: +++
 - tokenAuth so after refresh we are kept on the same page (not returned back to /login)
-- implement some backend task
+- add date of birth as parameter in "+ Add user" (dateTime picker)
 - if we click on user, zoom it in and display more info (e.g. username)
+- implement some backend task
