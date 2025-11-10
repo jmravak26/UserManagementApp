@@ -19,6 +19,7 @@ const SearchBar: React.FC<Props> = ({ onSearch, placeholder }) => {
 
   return (
     <input
+      type="search"
       className="search-input"
       placeholder={placeholder || 'Search...'}
       value={q}

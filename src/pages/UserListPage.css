@@ -4,9 +4,26 @@
 .add-btn {
   background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight:600;
 }
+.add-btn:hover {
+  background-color: #079767;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
   gap: 14px;
 }
 .loading, .empty { padding: 26px; text-align:center; color: #475569; }
+
+.logout-btn {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
