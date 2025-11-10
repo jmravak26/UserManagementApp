@@ -69,3 +69,6 @@ npm run dev
 
 ***Add and Filter User Screen***<br>
 ![AddFilterUserScreen](./assets/AddFilterUserScreen.png)
+
+***Logout Button Included Screen***<br>
+![LogoutButtonIncluded](./assets/LogoutButtonIncluded.png)
