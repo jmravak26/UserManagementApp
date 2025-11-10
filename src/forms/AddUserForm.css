@@ -3,5 +3,8 @@
 .form-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
 .btn { padding:8px 10px; border-radius:8px; border:none; }
 .btn.cancel { background:#f1f5f9; color:#0f172a; }
+.btn.cancel:hover { background:#dee0e2; color:#0f172a; }
 .btn.primary { background:#2563eb; color:white; font-weight:600; }
+.btn.primary:hover { background:#0d3691; color:white; font-weight:600; }
+
 .error { color:#dc2626; font-size:12px; }

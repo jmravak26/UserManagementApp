@@ -11,19 +11,26 @@ cd <name>
 INSTALL DEPENDENCIES:
 npm install
 
+--- start: Additional installs needed for my project ---
+
 (FOR MY PROJECT) INSTALL DEPENDENCIES (for use of Redux, Axios, PropTypes… this will update package.json file):
 npm install @reduxjs/toolkit react-redux redux-thunk axios formik prop-types react-router-dom yup
 
 FIX TypeScript + PropTypes compatibility issue:
 npm install --save-dev @types/prop-types
 
+Install React Datepicker
+npm install react-datepicker
+npm install @types/react-datepicker --save-dev
+
+--- end: Additional installs needed for my project ---
 
 START DEV SERVER (start local page):
 npm run dev
 
 
 +++ ADD POTENTIAL IMPROVEMENTS: +++
-- tokenAuth so after refresh we are kept on the same page (not returned back to /login)
-- add date of birth as parameter in "+ Add user" (dateTime picker)
-- if we click on user, zoom it in and display more info (e.g. username)
+- tokenAuth so after refresh we are kept on the same page (not returned back to /login) -> DONE
+- add date of birth as parameter in "+ Add user" (dateTime picker) -> DONE
+- if we click on user, zoom it in and display more info (e.g. username, birth date)
 - implement some backend task
