@@ -28,3 +28,30 @@
 .logout-btn:hover {
   background-color: #c9302c;
 }
+
+.load-more-btn {
+  margin-top: 24px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+.load-more-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+}
+
+.load-more-btn:active {
+  transform: scale(0.97);
+}

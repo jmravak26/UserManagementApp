@@ -34,9 +34,9 @@ npm run dev
 - add date of birth as parameter in "+ Add user" (dateTime picker) -> DONE
 - if we click on user, zoom it in and display more info (e.g. username, birth date) -> DONE
 - fix Search margin from the left side (Users and Search touch when scaled to minimum) -> DONE
+- add "infinite scroll" (load more) for users (maybe load 6 or 8 at the time) -> DONE
 
 - add option for +Add User to insert phone number (include Country number as dropdown option)
-- add "infinite scroll" (load more) for users (maybe load 6 or 8 at the time)
 - add option to /login to login as FB or Gmail user
 - ? add drop down with roles for users
 - ? add regular, plus, premium user so it can access different things in app

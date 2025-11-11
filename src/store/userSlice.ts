@@ -5,94 +5,103 @@ import type { User } from '../types/User';
 const LOCAL_STORAGE_KEY = 'addedLocalUsers';
 
 const loadPersistedUsers = (): User[] => {
-    try {
-        const serializedState = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (serializedState === null) {
-            return [];
-        }
-        return JSON.parse(serializedState) as User[];
-    } catch (e) {
-        console.error("Could not load persisted state", e);
-        return [];
-    }
+  try {
+    const serializedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (serializedState === null) return [];
+    return JSON.parse(serializedState) as User[];
+  } catch (e) {
+    console.error("Could not load persisted state", e);
+    return [];
+  }
 };
 
 const savePersistedUsers = (users: User[]) => {
-    try {
-        const serializedState = JSON.stringify(users);
-        localStorage.setItem(LOCAL_STORAGE_KEY, serializedState);
-    } catch (e) {
-        console.error("Could not save state", e);
-    }
+  try {
+    const serializedState = JSON.stringify(users);
+    localStorage.setItem(LOCAL_STORAGE_KEY, serializedState);
+  } catch (e) {
+    console.error("Could not save state", e);
+  }
 };
 
-export const fetchUsers = createAsyncThunk('users/fetch', async () => {
-    const data = await getUsers();
-    return data.data as User[];
+// Updated thunk to support pagination
+export const fetchUsers = createAsyncThunk('users/fetch', async (page: number = 1) => {
+  const { data, hasMore } = await getUsers(page);
+  return { data, page, hasMore };
 });
 
 interface UsersState {
-    apiItems: User[];
-    localItems: User[];
-    items: User[];
-    loading: boolean;
-    error: string | null;
+  apiItems: User[];
+  localItems: User[];
+  items: User[];
+  loading: boolean;
+  error: string | null;
+  hasMore: boolean;
+  page: number;
 }
 
 const initialState: UsersState = {
-    apiItems: [],
-    localItems: loadPersistedUsers(),
-    items: loadPersistedUsers(),
-    loading: false,
-    error: null
+  apiItems: [],
+  localItems: loadPersistedUsers(),
+  items: loadPersistedUsers(),
+  loading: false,
+  error: null,
+  hasMore: true,
+  page: 0
 };
 
 const CLEAN_STATE: UsersState = {
-    apiItems: [],
-    localItems: [],
-    items: [],
-    loading: false,
-    error: null
+  apiItems: [],
+  localItems: [],
+  items: [],
+  loading: false,
+  error: null,
+  hasMore: true,
+  page: 0
 };
 
 const usersSlice = createSlice({
-    name: 'users',
-    initialState,
-    reducers: {
-        // --- Only persist the newly added user, and update both lists ---
-        addLocalUser(state, action) {
-            const newUser = action.payload as User;            
-            // 1. Add to the localItems list
-            state.localItems.unshift(newUser);            
-            // 2. Update the combined items list
-            state.items.unshift(newUser);            
-            // 3. Persist ONLY the localItems list
-            savePersistedUsers(state.localItems);
-        },        
-        // NEW REDUCER: Resets the in-memory state back to empty arrays
-        resetUsers: () => CLEAN_STATE 
+  name: 'users',
+  initialState,
+  reducers: {
+    addLocalUser(state, action) {
+      const newUser = action.payload as User;
+      state.localItems.unshift(newUser);
+      state.items.unshift(newUser);
+      savePersistedUsers(state.localItems);
     },
-    extraReducers: (builder) => {
-        builder.addCase(fetchUsers.pending, (s) => { 
-            s.loading = true; 
-            s.error = null; 
-        });
-        
-        builder.addCase(fetchUsers.fulfilled, (s, a) => { 
-            s.loading = false;
-            // 1. Save the API users separately
-            s.apiItems = a.payload;
-            // 2. Create the combined list: local users first, then API users
-            s.items = [...s.localItems, ...s.apiItems];
-        });
-        
-        builder.addCase(fetchUsers.rejected, (s, a) => { 
-            s.loading = false; 
-            s.error = a.error.message ?? 'Failed to load'; 
-        });
-    }
+    resetUsers: () => CLEAN_STATE
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUsers.pending, (s) => {
+      s.loading = true;
+      s.error = null;
+    });
+
+    builder.addCase(fetchUsers.fulfilled, (s, a) => {
+      s.loading = false;
+      const { data, page, hasMore } = a.payload;
+
+      // Append new page results instead of replacing
+      if (page > 1) {
+        s.apiItems = [...s.apiItems, ...data];
+      } else {
+        s.apiItems = data;
+      }
+
+      s.page = page;
+      s.hasMore = hasMore;
+
+      // Combine local and API users
+      s.items = [...s.localItems, ...s.apiItems];
+    });
+
+    builder.addCase(fetchUsers.rejected, (s, a) => {
+      s.loading = false;
+      s.error = a.error.message ?? 'Failed to load';
+    });
+  }
 });
 
-// Export the new reset action
-export const { addLocalUser, resetUsers } = usersSlice.actions; 
+export const { addLocalUser, resetUsers } = usersSlice.actions;
 export default usersSlice.reducer;
