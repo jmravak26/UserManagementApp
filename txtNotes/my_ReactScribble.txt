@@ -32,5 +32,13 @@ npm run dev
 +++ ADD POTENTIAL IMPROVEMENTS: +++
 - tokenAuth so after refresh we are kept on the same page (not returned back to /login) -> DONE
 - add date of birth as parameter in "+ Add user" (dateTime picker) -> DONE
-- if we click on user, zoom it in and display more info (e.g. username, birth date)
+- if we click on user, zoom it in and display more info (e.g. username, birth date) -> DONE
+
+- add "infinite scroll" (load more) for users (maybe load 6 or 8 at the time)
+- fix Search margin from the left side (Users and Search touch when scaled to minimum)
+- add option to /login to login as FB or Gmail user
+- add option for +Add User to insert phone number (include Country number as dropdown option)
+- ? add drop down with roles for users
+- ? add regular, plus, premium user so it can access different things in app
+- ? add "send email / sms" with some kind of built in template of email already ready for use
 - implement some backend task

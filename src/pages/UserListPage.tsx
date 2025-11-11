@@ -9,6 +9,8 @@ import { logout } from '../store/authSlice';
 import { resetUsers } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './UserListPage.css';
+import UserDetailModal from "../components/UserDetailModal";
+import type { User } from "../types/User";
 
 const UserListPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +19,7 @@ const UserListPage: React.FC = () => {
   const { items, loading } = useAppSelector((s) => s.users);
   const [filter, setFilter] = useState('');
   const [showAdd, setShowAdd] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -31,6 +34,10 @@ const UserListPage: React.FC = () => {
     dispatch(resetUsers()); // Clears in-memory Redux state
     dispatch(logout());
     navigate('/login'); // redirects user to login page
+  };
+
+  const handleUserClick = (user: User) => {
+    setSelectedUser(user);
   };
 
 
@@ -48,7 +55,13 @@ const UserListPage: React.FC = () => {
       <main>
         {loading ? <div className="loading">Loading users...</div> :
           <div className="grid">
-            {filtered.map(u => <UserCard key={u.id} user={u} />)}
+            {filtered.map(u => 
+              <UserCard 
+                key={u.id} 
+                user={u} 
+                onClick={handleUserClick}
+              />
+            )}
             {filtered.length === 0 && <div className="empty">No users found</div>}
           </div>
         }
@@ -62,6 +75,12 @@ const UserListPage: React.FC = () => {
           setShowAdd(false);
         }}
       />
+      {selectedUser && (
+        <UserDetailModal 
+          user={selectedUser} 
+          onClose={() => setSelectedUser(null)} 
+        />
+      )}
     </div>
   );
 };

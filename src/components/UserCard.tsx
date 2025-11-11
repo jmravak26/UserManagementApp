@@ -3,12 +3,19 @@ import PropTypes from 'prop-types';
 import type { User } from '../types/User';
 import './UserCard.css';
 
-type Props = { user: User };
+type Props = {
+  user: User;
+  onClick?: (user: User) => void;
+};
 
-const UserCard: React.FC<Props> = ({ user }) => {
+const UserCard: React.FC<Props> = ({ user, onClick }) => {
   return (
-    <div className="user-card">
-      <img src={user.avatar} alt={`${user.name} avatar`} className="avatar" />
+    <div className="user-card" onClick={() => onClick?.(user)}>
+      <img
+        src={user.avatar}
+        alt={`${user.name} avatar`}
+        className="avatar"
+      />
       <div className="info">
         <div className="name">{user.name}</div>
         <div className="email">{user.email}</div>
@@ -21,10 +28,11 @@ const UserCard: React.FC<Props> = ({ user }) => {
   user: PropTypes.shape({
     id: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
-    first_name: PropTypes.string.isRequired,
-    last_name: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired
-  }).isRequired
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
+  }).isRequired,
+  onClick: PropTypes.func,
 };
 
 export default UserCard;

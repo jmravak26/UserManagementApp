@@ -1,0 +1,81 @@
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: zoomIn 0.2s ease-in;
+  position: relative; /* MAKE SURE this is present to establish a stacking context for .close-btn */
+}
+
+/* New Exit Keyframes */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes zoomOut {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(0.9); opacity: 0; }
+}
+
+/* Update Modal Classes for smoother transition on removal */
+.modal-overlay.exit {
+  animation: fadeOut 0.2s ease-out forwards;
+}
+
+.modal-content.exit {
+  animation: zoomOut 0.2s ease-out forwards;
+}
+
+.detail-avatar {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  object-fit: cover;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  z-index: 10; /* Ensures it is above all other modal content */
+  color: #333; /* Default color for the X */
+  transition: transform 0.3s ease-out, color 0.3s ease-out; /* Smooth transition for hover effects */
+}
+
+.close-btn:hover {
+  color: #ff4d4d;
+  transform: rotate(180deg);
+}
