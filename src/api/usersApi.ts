@@ -1,20 +1,41 @@
 import axios from 'axios';
+import { UserRole } from '../types/User';
 
 const api = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
   timeout: 5000
 });
 
+// Helper function to assign default roles to API users
+const getDefaultRole = (userId: number): UserRole => {
+  // Assign roles based on user ID for demo purposes
+  if (userId === 1) return UserRole.ADMIN;
+  if (userId <= 3) return UserRole.MANAGER;
+  return UserRole.USER;
+};
+
+// Helper function to generate random birth dates
+const getRandomBirthDate = (): string => {
+  const start = new Date(1970, 0, 1);
+  const end = new Date(2000, 11, 31);
+  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  return randomDate.toISOString().split('T')[0].split('-').reverse().join('-');
+};
+
 const PAGE_SIZE = 4;
 
 export const getUsers = async (page = 1) => {
   const res = await api.get('/users');
+  // Map API users and assign default roles and birth dates
   const allUsers = res.data.map((u: any) => ({
     id: u.id,
     name: u.name,
     username: u.username,
     email: u.email,
-    avatar: `https://i.pravatar.cc/150?u=${u.id}`
+    avatar: `https://i.pravatar.cc/150?u=${u.id}`,
+    role: getDefaultRole(u.id),
+    birthDate: getRandomBirthDate(),
+    phone: undefined
   }));
 
   const start = (page - 1) * PAGE_SIZE;

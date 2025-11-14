@@ -1,12 +1,39 @@
 .user-card {
-  display:flex;
+  display: flex;
   gap: 12px;
   padding: 12px;
   border-radius: 10px;
   background: white;
-  align-items:center;
+  align-items: center;
   box-shadow: 0 3px 10px rgba(2,6,23,0.04);
 }
-.avatar { width:56px; height:56px; border-radius:999px; object-fit:cover; }
-.info .name { font-weight:700; color:#0f172a; margin-bottom:4px; }
-.info .email { font-size:13px; color:#475569; }
+
+.avatar { 
+  width: 56px; 
+  height: 56px; 
+  border-radius: 999px; 
+  object-fit: cover; 
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.info .name { 
+  font-weight: 700; 
+  color: #0f172a; 
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.info .email { 
+  font-size: 13px; 
+  color: #475569;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

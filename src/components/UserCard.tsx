@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import type { User } from '../types/User';
+import { UserRole } from '../types/User';
+import RoleBadge from './RoleBadge';
 import './UserCard.css';
 
 type Props = {
@@ -17,7 +19,10 @@ const UserCard: React.FC<Props> = ({ user, onClick }) => {
         className="avatar"
       />
       <div className="info">
-        <div className="name">{user.name}</div>
+        <div className="name">
+          {user.name}
+          <RoleBadge role={user.role} />
+        </div>
         <div className="email">{user.email}</div>
       </div>
     </div>
@@ -32,6 +37,7 @@ const UserCard: React.FC<Props> = ({ user, onClick }) => {
     username: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
     phone: PropTypes.string,
+    role: PropTypes.oneOf(Object.values(UserRole)).isRequired,
   }).isRequired,
   onClick: PropTypes.func,
 };

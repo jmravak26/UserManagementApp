@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
 import PhoneInput from 'react-phone-number-input';
+import { UserRole } from '../types/User';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-phone-number-input/style.css';
 import './AddUserForm.css';
 
-// Props is redundant to use with TypeScript but included since task requests PropTypes
 type Props = {
   onSubmit: (vals: {
     name: string;
@@ -17,23 +17,25 @@ type Props = {
     avatarUrl?: string;
     birthDate: Date | null;
     phone?: string;
+    role: UserRole;
   }) => void;
   onCancel?: () => void;
 };
 
-// Validation schema using Yup
+// Validation schema including role validation
 const Schema = Yup.object().shape({
   name: Yup.string().required('Required'),
   username: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
   birthDate: Yup.date().required('Required'),
-  phone: Yup.string()
+  phone: Yup.string(),
+  role: Yup.string().oneOf(Object.values(UserRole)).required('Role is required')
 });
 
 const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
     <Formik
-      initialValues={{ name: '', username: '', email: '', avatarUrl: '', birthDate: null, phone: '' }}
+      initialValues={{ name: '', username: '', email: '', avatarUrl: '', birthDate: null, phone: '', role: UserRole.USER }}
       validationSchema={Schema}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
@@ -78,6 +80,15 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             className="phone-input"
           />
           {errors.phone && touched.phone && <div className="error">{errors.phone}</div>}
+
+          {/* Role selection dropdown for user permissions */}
+          <label>Role</label>
+          <Field as="select" name="role" className="input">
+            <option value={UserRole.USER}>{UserRole.USER}</option>
+            <option value={UserRole.MANAGER}>{UserRole.MANAGER}</option>
+            <option value={UserRole.ADMIN}>{UserRole.ADMIN}</option>
+          </Field>
+          <ErrorMessage name="role" component="div" className="error" />
 
           <div className="form-actions">
             <button type="button" className="btn cancel" onClick={onCancel}>

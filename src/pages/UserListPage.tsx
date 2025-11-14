@@ -9,6 +9,7 @@ import SearchBar from '../components/SearchBar';
 import AddUserModal from '../components/AddUserModal';
 import UserDetailModal from "../components/UserDetailModal";
 import type { User } from "../types/User";
+import { UserRole } from '../types/User';
 import './UserListPage.css';
 
 const UserListPage: React.FC = () => {
@@ -16,6 +17,10 @@ const UserListPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { items, loading, hasMore, page } = useAppSelector((s) => s.users);
+  const { userRole } = useAppSelector((s) => s.auth); // Get current user's role
+  
+  // Check if current user can add users (Admin or Manager only)
+  const canAddUsers = userRole === UserRole.ADMIN || userRole === UserRole.MANAGER;
 
   const [filter, setFilter] = useState('');
   const [showAdd, setShowAdd] = useState(false);
@@ -47,12 +52,14 @@ const UserListPage: React.FC = () => {
   return (
     <div className="users-page">
       <header className="users-header">
-        <h2>Users</h2>
+        <h2 data-role={`Logged in as: ${userRole}`}>Users</h2>
         <div className="actions">
           <SearchBar onSearch={setFilter} placeholder="Search users..." />
-          <button className="add-btn" onClick={() => setShowAdd(true)}>
-            + Add user
-          </button>
+          {canAddUsers && (
+            <button className="add-btn" onClick={() => setShowAdd(true)}>
+              + Add user
+            </button>
+          )}
           <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>

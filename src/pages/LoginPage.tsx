@@ -4,7 +4,15 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { loginStart, loginSuccess, loginFail } from '../store/authSlice';
+import { UserRole } from '../types/User';
 import './LoginPage.css';
+
+// Helper function to determine user role based on email
+const getUserRoleFromEmail = (email: string): UserRole => {
+  if (email.includes('admin')) return UserRole.ADMIN;
+  if (email.includes('manager')) return UserRole.MANAGER;
+  return UserRole.USER;
+};
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -23,13 +31,14 @@ const LoginPage: React.FC = () => {
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={LoginSchema}
-          onSubmit={async (_, { setSubmitting, setFieldError }) => {
+          onSubmit={async (values, { setSubmitting, setFieldError }) => {
             try {
               dispatch(loginStart());
-              // Mock authentication - accept anything
               const fakeToken = 'mock-token-' + Date.now();
+              const userRole = getUserRoleFromEmail(values.email);
+              
               window.setTimeout(() => {
-                dispatch(loginSuccess({ token: fakeToken }));
+                dispatch(loginSuccess({ token: fakeToken, role: userRole }));
                 setSubmitting(false);
                 navigate('/users');
               }, 600);
@@ -58,7 +67,11 @@ const LoginPage: React.FC = () => {
         </Formik>
 
         <div className="hint">
-          <small>This is a mock login — enter any credentials.</small>
+          <small>Demo credentials:</small><br/>
+          <small><strong>Admin:</strong> admin@test.com</small><br/>
+          <small><strong>Manager:</strong> manager@test.com</small><br/>
+          <small><strong>User:</strong> user@test.com</small><br/>
+          <small>Password: any</small>
         </div>
       </div>
     </div>

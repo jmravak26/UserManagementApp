@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "./UserDetailModal.css";
 import type { User } from "../types/User";
+import RoleBadge from './RoleBadge';
 
 interface UserDetailModalProps {
   user: User;
@@ -36,11 +37,15 @@ return (
        <div className={contentClass} onClick={handleContentClick}>
         <button className="close-btn" onClick={handleClose}>&times;</button>
         <img src={user.avatar} alt={user.name} className="detail-avatar" />
-        <h2>{user.name}</h2>
+        <h2>
+          {user.name}
+          <RoleBadge role={user.role} />
+        </h2>
         <p><strong>Email:</strong> {user.email}</p>
         {user.username && <p><strong>Username:</strong> {user.username}</p>}
         {user.birthDate && <p><strong>Birth date:</strong> {user.birthDate}</p>}
         {user.phone && <p><strong>Phone:</strong> {user.phone}</p>}
+        <p><strong>Role:</strong> {user.role}</p>
       </div>
     </div>
   );
