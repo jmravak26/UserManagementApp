@@ -5,4 +5,5 @@ export interface User {
   username: string;
   avatar: string;
   birthDate: string;
+  phone?: string; // Optional phone number with country code
 }

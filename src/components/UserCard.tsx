@@ -31,6 +31,7 @@ const UserCard: React.FC<Props> = ({ user, onClick }) => {
     name: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
+    phone: PropTypes.string,
   }).isRequired,
   onClick: PropTypes.func,
 };

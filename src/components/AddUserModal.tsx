@@ -32,7 +32,8 @@ const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
                 email: values.email,
                 avatar: values.avatarUrl || `https://i.pravatar.cc/150?u=${Date.now()}`,
                 birthDate: values.birthDate
-                  ? new Date(values.birthDate).toISOString().split('T')[0].split('-').reverse().join('-') : ''
+                  ? new Date(values.birthDate).toISOString().split('T')[0].split('-').reverse().join('-') : '',
+                phone: values.phone || undefined
               };
               onAdd(newUser);
             }}

@@ -3,9 +3,12 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
+import PhoneInput from 'react-phone-number-input';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'react-phone-number-input/style.css';
 import './AddUserForm.css';
 
+// Props is redundant to use with TypeScript but included since task requests PropTypes
 type Props = {
   onSubmit: (vals: {
     name: string;
@@ -13,21 +16,24 @@ type Props = {
     email: string;
     avatarUrl?: string;
     birthDate: Date | null;
+    phone?: string;
   }) => void;
   onCancel?: () => void;
 };
 
+// Validation schema using Yup
 const Schema = Yup.object().shape({
   name: Yup.string().required('Required'),
   username: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
-  birthDate: Yup.date().required('Required')
+  birthDate: Yup.date().required('Required'),
+  phone: Yup.string()
 });
 
 const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
     <Formik
-      initialValues={{ name: '', username: '', email: '', avatarUrl: '', birthDate: null }}
+      initialValues={{ name: '', username: '', email: '', avatarUrl: '', birthDate: null, phone: '' }}
       validationSchema={Schema}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
@@ -62,6 +68,16 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
 
           <label>Avatar URL (optional)</label>
           <Field name="avatarUrl" className="input" />
+
+          <label>Phone Number (optional)</label>
+          <PhoneInput
+            placeholder="Enter phone number"
+            value={values.phone}
+            onChange={(value) => setFieldValue('phone', value || '')}
+            defaultCountry="HR"
+            className="phone-input"
+          />
+          {errors.phone && touched.phone && <div className="error">{errors.phone}</div>}
 
           <div className="form-actions">
             <button type="button" className="btn cancel" onClick={onCancel}>

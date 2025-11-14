@@ -8,3 +8,17 @@
 .btn.primary:hover { background:#0d3691; color:white; font-weight:600; }
 
 .error { color:#dc2626; font-size:12px; }
+
+/* Phone input styling to match existing form inputs */
+.phone-input .PhoneInputInput {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+  font-size: 14px;
+}
+
+.phone-input .PhoneInputCountrySelect {
+  border: 1px solid #e6e9ef;
+  border-radius: 8px;
+  margin-right: 4px;
+}

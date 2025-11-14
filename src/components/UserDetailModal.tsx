@@ -40,6 +40,7 @@ return (
         <p><strong>Email:</strong> {user.email}</p>
         {user.username && <p><strong>Username:</strong> {user.username}</p>}
         {user.birthDate && <p><strong>Birth date:</strong> {user.birthDate}</p>}
+        {user.phone && <p><strong>Phone:</strong> {user.phone}</p>}
       </div>
     </div>
   );
