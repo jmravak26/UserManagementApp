@@ -70,6 +70,28 @@ const usersSlice = createSlice({
       state.items.unshift(newUser);
       savePersistedUsers(state.localItems);
     },
+    updateUser(state, action) {
+      const updatedUser = action.payload as User;
+      
+      // Update in localItems if it exists there
+      const localIndex = state.localItems.findIndex(u => u.id === updatedUser.id);
+      if (localIndex !== -1) {
+        state.localItems[localIndex] = updatedUser;
+        savePersistedUsers(state.localItems);
+      }
+      
+      // Update in apiItems if it exists there
+      const apiIndex = state.apiItems.findIndex(u => u.id === updatedUser.id);
+      if (apiIndex !== -1) {
+        state.apiItems[apiIndex] = updatedUser;
+      }
+      
+      // Update in combined items array
+      const itemsIndex = state.items.findIndex(u => u.id === updatedUser.id);
+      if (itemsIndex !== -1) {
+        state.items[itemsIndex] = updatedUser;
+      }
+    },
     resetUsers: () => CLEAN_STATE
   },
   extraReducers: (builder) => {
@@ -103,5 +125,5 @@ const usersSlice = createSlice({
   }
 });
 
-export const { addLocalUser, resetUsers } = usersSlice.actions;
+export const { addLocalUser, updateUser, resetUsers } = usersSlice.actions;
 export default usersSlice.reducer;

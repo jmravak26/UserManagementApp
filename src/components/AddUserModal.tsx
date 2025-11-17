@@ -33,7 +33,8 @@ const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
                 birthDate: values.birthDate
                   ? new Date(values.birthDate).toISOString().split('T')[0].split('-').reverse().join('-') : '',
                 phone: values.phone || undefined,
-                role: values.role
+                role: values.role,
+                status: values.status
               };
               onAdd(newUser);
             }}

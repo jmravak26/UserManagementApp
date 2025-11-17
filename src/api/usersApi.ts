@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserRole } from '../types/User';
+import { UserRole, UserStatus } from '../types/User';
 
 const api = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
@@ -12,6 +12,12 @@ const getDefaultRole = (userId: number): UserRole => {
   if (userId === 1) return UserRole.ADMIN;
   if (userId <= 3) return UserRole.MANAGER;
   return UserRole.USER;
+};
+
+// Helper function to assign default status to API users
+const getDefaultStatus = (userId: number): UserStatus => {
+  // Most users are active, some inactive for demo purposes (every 7th user inactive)
+  return userId % 7 === 0 ? UserStatus.INACTIVE : UserStatus.ACTIVE;
 };
 
 // Helper function to generate random birth dates
@@ -35,7 +41,8 @@ export const getUsers = async (page = 1) => {
     avatar: `https://i.pravatar.cc/150?u=${u.id}`,
     role: getDefaultRole(u.id),
     birthDate: getRandomBirthDate(),
-    phone: undefined
+    phone: undefined,
+    status: getDefaultStatus(u.id)
   }));
 
   const start = (page - 1) * PAGE_SIZE;

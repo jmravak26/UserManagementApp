@@ -58,6 +58,8 @@ npm run dev
 ```
 
 ## Screenshots of User management app
+**Note:** The pictures provided below display the initial working app. All further feature implementations (such as user editing, detailed user modals, enhanced status management, etc.) are not displayed in these screenshots.
+
 ***Login Screen***<br>
 ![LoginScreen](./assets/LoginScreen.png)
 

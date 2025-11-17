@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
-import { fetchUsers, addLocalUser, resetUsers } from '../store/userSlice';
+import { fetchUsers, addLocalUser, updateUser, resetUsers } from '../store/userSlice';
 import { logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import UserCard from '../components/UserCard';
@@ -42,6 +42,10 @@ const UserListPage: React.FC = () => {
   };
 
   const handleUserClick = (user: User) => setSelectedUser(user);
+
+  const handleUserUpdate = (updatedUser: User) => {
+    dispatch(updateUser(updatedUser));
+  };
 
   const handleLoadMore = () => {
     if (!loading && hasMore) {
@@ -101,6 +105,8 @@ const UserListPage: React.FC = () => {
         <UserDetailModal
           user={selectedUser}
           onClose={() => setSelectedUser(null)}
+          onSave={handleUserUpdate}
+          canEdit={canAddUsers} // Only Admin/Manager can edit users
         />
       )}
     </div>

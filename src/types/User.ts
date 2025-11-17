@@ -8,6 +8,14 @@ export const UserRole = {
 // Create type from the const object
 export type UserRole = typeof UserRole[keyof typeof UserRole];
 
+// Define user status for activity tracking
+export const UserStatus = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive'
+} as const;
+
+export type UserStatus = typeof UserStatus[keyof typeof UserStatus];
+
 export interface User {
   id: number;
   name: string;
@@ -17,4 +25,5 @@ export interface User {
   birthDate: string;
   phone?: string;
   role: UserRole;
+  status: UserStatus;
 }

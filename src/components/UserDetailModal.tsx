@@ -1,26 +1,54 @@
 import React, { useState } from 'react';
 import "./UserDetailModal.css";
 import type { User } from "../types/User";
+import { UserRole, UserStatus } from "../types/User";
 import RoleBadge from './RoleBadge';
 
 interface UserDetailModalProps {
   user: User;
   onClose: () => void;
+  onSave?: (updatedUser: User) => void;
+  canEdit?: boolean;
 }
 
 const EXIT_DURATION = 200; // Must match the CSS animation duration (0.2s)
 
-const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose }) => {
-  // 1. State to control the exit animation CSS class
-  const [isExiting, setIsExiting] = useState(false);
+const UserDetailModal: React.FC<UserDetailModalProps> = ({ 
+  user, 
+  onClose, 
+  onSave, 
+  canEdit = false 
+}) => {
+  const [isExiting, setIsExiting] = useState(false);  
+  const [isEditing, setIsEditing] = useState(false);  
+  const [editedUser, setEditedUser] = useState<User>(user);
 
   if (!user) return null;
 
   const handleClose = () => {
-  // 2. Start the exit animation immediately
     setIsExiting(true);
-  // 3. After the animation duration, truly close the modal (unmount the component)
+    // After the animation duration, truly close the modal (unmount the component)
     setTimeout(onClose, EXIT_DURATION);
+  };
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave(editedUser);
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditedUser(user); // Reset to original data
+    setIsEditing(false);
+  };
+
+  const handleStatusToggle = () => {
+    const newStatus = editedUser.status === UserStatus.ACTIVE 
+      ? UserStatus.INACTIVE 
+      : UserStatus.ACTIVE;
+    
+    setEditedUser({ ...editedUser, status: newStatus });
   };
 
   // Prevent closing the modal when clicking on the content
@@ -32,20 +60,123 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose }) => {
   const overlayClass = `modal-overlay ${isExiting ? 'exit' : ''}`;
   const contentClass = `modal-content ${isExiting ? 'exit' : ''}`;
 
-return (
+  return (
     <div className={overlayClass} onClick={handleClose}>
-       <div className={contentClass} onClick={handleContentClick}>
-        <button className="close-btn" onClick={handleClose}>&times;</button>
-        <img src={user.avatar} alt={user.name} className="detail-avatar" />
-        <h2>
-          {user.name}
-          <RoleBadge role={user.role} />
-        </h2>
-        <p><strong>Email:</strong> {user.email}</p>
-        {user.username && <p><strong>Username:</strong> {user.username}</p>}
-        {user.birthDate && <p><strong>Birth date:</strong> {user.birthDate}</p>}
-        {user.phone && <p><strong>Phone:</strong> {user.phone}</p>}
-        <p><strong>Role:</strong> {user.role}</p>
+      <div className={contentClass} onClick={handleContentClick}>
+        <div className="modal-header">
+          <h2>User Profile</h2>
+          <div className="header-actions">
+            {canEdit && !isEditing && (
+              <button className="edit-btn" onClick={() => setIsEditing(true)}>
+                ✏️ Edit
+              </button>
+            )}
+            <button className="close-btn" onClick={handleClose}>&times;</button>
+          </div>
+        </div>
+
+        <img src={editedUser.avatar} alt={editedUser.name} className="detail-avatar" />
+        
+        {/* User information - either view or edit mode */}
+        <div className="user-info">
+          {isEditing ? (
+            // EDIT MODE
+            <>
+              <div className="form-group">
+                <label><strong>Name:</strong></label>
+                <input
+                  type="text"
+                  value={editedUser.name}
+                  onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                  className="edit-input"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label><strong>Email:</strong></label>
+                <input
+                  type="email"
+                  value={editedUser.email}
+                  onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                  className="edit-input"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label><strong>Username:</strong></label>
+                <input
+                  type="text"
+                  value={editedUser.username}
+                  onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })}
+                  className="edit-input"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label><strong>Phone:</strong></label>
+                <input
+                  type="text"
+                  value={editedUser.phone || ''}
+                  onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })}
+                  className="edit-input"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label><strong>Role:</strong></label>
+                <select
+                  value={editedUser.role}
+                  onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserRole })}
+                  className="edit-select"
+                >
+                  {Object.values(UserRole).map(role => (
+                    <option key={role} value={role}>{role}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="form-group status-group">
+                <label><strong>Status:</strong></label>
+                <button
+                  onClick={handleStatusToggle}
+                  className={`status-toggle ${editedUser.status.toLowerCase()}`}
+                >
+                  {editedUser.status === UserStatus.ACTIVE ? '🟢' : '🔴'} {editedUser.status}
+                </button>
+              </div>
+              
+              <div className="edit-actions">
+                <button className="save-btn" onClick={handleSave}>
+                  💾 Save Changes
+                </button>
+                <button className="cancel-btn" onClick={handleCancelEdit}>
+                  ❌ Cancel
+                </button>
+              </div>
+            </>
+          ) : (
+            // VIEW MODE
+            <>
+              <div className="user-header">
+                <h3>
+                  {editedUser.name}
+                  <RoleBadge role={editedUser.role} />
+                </h3>
+                <div className={`status-indicator ${editedUser.status.toLowerCase()}`}>
+                  {editedUser.status === UserStatus.ACTIVE ? '🟢' : '🔴'} {editedUser.status}
+                </div>
+              </div>
+              
+              <div className="user-details">
+                <p><strong>Email:</strong> {editedUser.email}</p>
+                <p><strong>Username:</strong> {editedUser.username}</p>
+                {editedUser.birthDate && <p><strong>Birth Date:</strong> {editedUser.birthDate}</p>}
+                {editedUser.phone && <p><strong>Phone:</strong> {editedUser.phone}</p>}
+                <p><strong>Role:</strong> {editedUser.role}</p>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

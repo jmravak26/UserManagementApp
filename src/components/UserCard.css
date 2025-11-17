@@ -36,4 +36,34 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-bottom: 6px; /* Add space for status indicator */
+}
+
+/* Hover effect for better user interaction */
+.user-card:hover {
+  cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(2,6,23,0.08);
+  transition: all 0.2s ease;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+  .user-card {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .avatar {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .info .name {
+    font-size: 0.9rem;
+  }
+  
+  .info .email {
+    font-size: 0.75rem;
+  }
 }

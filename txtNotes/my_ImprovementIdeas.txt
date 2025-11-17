@@ -9,7 +9,7 @@ Multi-select checkboxes for users
 Bulk delete, bulk role assignment, bulk export to CSV
 "Select All" functionality
 
-3. User Profile Management
+3. User Profile Management 🗸
 Click on user to open detailed profile modal
 Edit user functionality (inline or modal-based)
 User activity status (Active/Inactive toggle)
