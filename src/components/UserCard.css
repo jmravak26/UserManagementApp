@@ -6,6 +6,25 @@
   background: white;
   align-items: center;
   box-shadow: 0 3px 10px rgba(2,6,23,0.04);
+  position: relative;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.user-card.selected {
+  background: #f0f9ff;
+  border-color: #3b82f6;
+  box-shadow: 0 3px 15px rgba(59, 130, 246, 0.15);
+}
+
+.user-checkbox {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  z-index: 10;
 }
 
 .avatar { 
@@ -45,6 +64,10 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(2,6,23,0.08);
   transition: all 0.2s ease;
+}
+
+.user-card.selected:hover {
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
 }
 
 /* Responsive adjustments for smaller screens */

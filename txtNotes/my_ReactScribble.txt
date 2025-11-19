@@ -25,5 +25,11 @@ npm install @types/react-datepicker --save-dev
 
 --- end: Additional installs needed for my project ---
 
+--- start: Check for compilation errors ---
+
+npm run build
+
+--- end: Check for compilation errors ---
+
 START DEV SERVER (start local page):
 npm run dev

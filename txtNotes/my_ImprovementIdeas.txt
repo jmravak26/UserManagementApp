@@ -4,7 +4,7 @@ Add role dropdown (Admin, Manager, User) in the add/edit user form
 Implement role-based access control (different views/actions based on role)
 Show role badges in the user grid
 
-2. Bulk Operations
+2. Bulk Operations 🗸
 Multi-select checkboxes for users
 Bulk delete, bulk role assignment, bulk export to CSV
 "Select All" functionality

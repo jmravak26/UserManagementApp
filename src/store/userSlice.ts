@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUsers } from '../api/usersApi';
 import type { User } from '../types/User';
+import { UserRole } from '../types/User';
 
 const LOCAL_STORAGE_KEY = 'addedLocalUsers';
 
@@ -92,6 +93,30 @@ const usersSlice = createSlice({
         state.items[itemsIndex] = updatedUser;
       }
     },
+    bulkDeleteUsers(state, action) {
+      const userIdsToDelete = action.payload as number[];
+      
+      state.localItems = state.localItems.filter(user => !userIdsToDelete.includes(user.id));
+      state.apiItems = state.apiItems.filter(user => !userIdsToDelete.includes(user.id));
+      state.items = state.items.filter(user => !userIdsToDelete.includes(user.id));
+      
+      savePersistedUsers(state.localItems);
+    },
+    bulkUpdateUserRoles(state, action) {
+      const { userIds, role } = action.payload as { userIds: number[], role: UserRole };
+      
+      state.localItems = state.localItems.map(user => 
+        userIds.includes(user.id) ? { ...user, role } : user
+      );
+      state.apiItems = state.apiItems.map(user => 
+        userIds.includes(user.id) ? { ...user, role } : user
+      );
+      state.items = state.items.map(user => 
+        userIds.includes(user.id) ? { ...user, role } : user
+      );
+      
+      savePersistedUsers(state.localItems);
+    },
     resetUsers: () => CLEAN_STATE
   },
   extraReducers: (builder) => {
@@ -125,5 +150,5 @@ const usersSlice = createSlice({
   }
 });
 
-export const { addLocalUser, updateUser, resetUsers } = usersSlice.actions;
+export const { addLocalUser, updateUser, bulkDeleteUsers, bulkUpdateUserRoles, resetUsers } = usersSlice.actions;
 export default usersSlice.reducer;

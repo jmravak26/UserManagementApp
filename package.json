@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
+    "@types/papaparse": "^5.5.0",
     "axios": "^1.13.2",
     "formik": "^2.4.6",
+    "papaparse": "^5.5.3",
     "prop-types": "^15.8.1",
     "react": "^19.1.1",
     "react-datepicker": "^8.8.0",

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AddUserForm from '../forms/AddUserForm';
 import type { User } from '../types/User';
+import { UserStatus } from '../types/User';
 import './AddUserModal.css';
 
 type Props = {
@@ -34,7 +35,7 @@ const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
                   ? new Date(values.birthDate).toISOString().split('T')[0].split('-').reverse().join('-') : '',
                 phone: values.phone || undefined,
                 role: values.role,
-                status: values.status
+                status: UserStatus.ACTIVE
               };
               onAdd(newUser);
             }}

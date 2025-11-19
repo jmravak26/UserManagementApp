@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
-import { fetchUsers, addLocalUser, updateUser, resetUsers } from '../store/userSlice';
+import { fetchUsers, addLocalUser, updateUser, resetUsers, bulkDeleteUsers, bulkUpdateUserRoles } from '../store/userSlice';
+import { toggleUserSelection, selectAllUsers, deselectAllUsers, removeDeletedUsers } from '../store/selectionSlice';
 import { logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import UserCard from '../components/UserCard';
 import SearchBar from '../components/SearchBar';
 import AddUserModal from '../components/AddUserModal';
 import UserDetailModal from "../components/UserDetailModal";
+import BulkActionsToolbar from '../components/BulkActionsToolbar';
 import type { User } from "../types/User";
 import { UserRole } from '../types/User';
 import './UserListPage.css';
@@ -17,9 +19,9 @@ const UserListPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { items, loading, hasMore, page } = useAppSelector((s) => s.users);
-  const { userRole } = useAppSelector((s) => s.auth); // Get current user's role
+  const { userRole } = useAppSelector((s) => s.auth);
+  const { selectedUserIds } = useAppSelector((s) => s.selection);
   
-  // Check if current user can add users (Admin or Manager only)
   const canAddUsers = userRole === UserRole.ADMIN || userRole === UserRole.MANAGER;
 
   const [filter, setFilter] = useState('');
@@ -34,6 +36,14 @@ const UserListPage: React.FC = () => {
   const filtered = items.filter((u) =>
     u.name.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const selectedUsers = useMemo(() => 
+    items.filter(user => selectedUserIds.includes(user.id)), 
+    [items, selectedUserIds]
+  );
+
+  const isAllVisibleSelected = filtered.length > 0 && filtered.every(user => selectedUserIds.includes(user.id));
+  const isSomeSelected = selectedUserIds.length > 0 && selectedUserIds.length < filtered.length;
 
   const handleLogout = () => {
     dispatch(resetUsers());
@@ -53,11 +63,49 @@ const UserListPage: React.FC = () => {
     }
   };
 
+  const handleUserSelection = (userId: number) => {
+    dispatch(toggleUserSelection(userId));
+  };
+
+  const handleSelectAll = () => {
+    if (isAllVisibleSelected) {
+      dispatch(deselectAllUsers());
+    } else {
+      const visibleUserIds = filtered.map(user => user.id);
+      dispatch(selectAllUsers(visibleUserIds));
+    }
+  };
+
+  const handleBulkDelete = () => {
+    dispatch(bulkDeleteUsers(selectedUserIds));
+    dispatch(removeDeletedUsers(selectedUserIds));
+  };
+
+  const handleBulkRoleChange = (role: UserRole) => {
+    dispatch(bulkUpdateUserRoles({ userIds: selectedUserIds, role }));
+  };
+
+  const handleDeselectAll = () => {
+    dispatch(deselectAllUsers());
+  };
+
   return (
     <div className="users-page">
       <header className="users-header">
         <h2 data-role={`Logged in as: ${userRole}`}>Users</h2>
         <div className="actions">
+          <div className="select-all-container">
+            <input
+              type="checkbox"
+              id="select-all"
+              checked={isAllVisibleSelected}
+              ref={(input) => {
+                if (input) input.indeterminate = isSomeSelected;
+              }}
+              onChange={handleSelectAll}
+            />
+            <label htmlFor="select-all">Select All</label>
+          </div>
           <SearchBar onSearch={setFilter} placeholder="Search users..." />
           {canAddUsers && (
             <button className="add-btn" onClick={() => setShowAdd(true)}>
@@ -70,10 +118,25 @@ const UserListPage: React.FC = () => {
         </div>
       </header>
 
+      <BulkActionsToolbar
+        selectedCount={selectedUserIds.length}
+        selectedUsers={selectedUsers}
+        currentUserRole={userRole}
+        onBulkDelete={handleBulkDelete}
+        onBulkRoleChange={handleBulkRoleChange}
+        onDeselectAll={handleDeselectAll}
+      />
+
       <main>
         <div className="grid">
           {filtered.map((u) => (
-            <UserCard key={u.id} user={u} onClick={handleUserClick} />
+            <UserCard 
+              key={u.id} 
+              user={u} 
+              onClick={handleUserClick}
+              isSelected={selectedUserIds.includes(u.id)}
+              onSelectionChange={handleUserSelection}
+            />
           ))}
         </div>
 

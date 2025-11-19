@@ -48,6 +48,29 @@
   gap: 12px; 
   align-items: center;
 }
+
+.select-all-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.select-all-container input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.select-all-container label {
+  cursor: pointer;
+  margin: 0;
+  font-weight: 500;
+}
 .add-btn {
   background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight:600;
 }
@@ -103,7 +126,7 @@
   transform: scale(0.97);
 }
 
-/* Hide tooltip on mobile devices */
+/* Responsive design for mobile devices */
 @media (max-width: 768px) {
   .users-header h2 {
     cursor: default;
@@ -111,5 +134,37 @@
   
   .users-header h2::after {
     display: none;
+  }
+  
+  .users-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .select-all-container {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .users-page {
+    padding: 16px;
+  }
+  
+  .actions {
+    gap: 6px;
+  }
+  
+  .select-all-container {
+    font-size: 12px;
+    padding: 4px 8px;
   }
 }
