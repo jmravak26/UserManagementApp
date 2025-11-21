@@ -25,7 +25,10 @@ const getRandomBirthDate = (): string => {
   const start = new Date(1970, 0, 1);
   const end = new Date(2000, 11, 31);
   const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  return randomDate.toISOString().split('T')[0].split('-').reverse().join('-');
+  const day = randomDate.getDate().toString().padStart(2, '0');
+  const month = (randomDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = randomDate.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
 const PAGE_SIZE = 4;

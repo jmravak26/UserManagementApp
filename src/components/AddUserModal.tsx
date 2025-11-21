@@ -32,7 +32,13 @@ const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
                 email: values.email,
                 avatar: values.avatarUrl || `https://i.pravatar.cc/150?u=${Date.now()}`,
                 birthDate: values.birthDate
-                  ? new Date(values.birthDate).toISOString().split('T')[0].split('-').reverse().join('-') : '',
+                  ? (() => {
+                      const date = new Date(values.birthDate);
+                      const day = date.getDate().toString().padStart(2, '0');
+                      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                      const year = date.getFullYear();
+                      return `${day}/${month}/${year}`;
+                    })() : '',
                 phone: values.phone || undefined,
                 role: values.role,
                 status: UserStatus.ACTIVE
