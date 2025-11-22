@@ -2,8 +2,43 @@
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid #e6e9ef;
-  width: 220px;
-  margin-left: 8px;
-  margin-right: 8px;
+  width: 160px;
+  margin-left: 4px;
+  margin-right: 4px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: white;
+  height: 34px;
+  box-sizing: border-box;
 }
-.search-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.06); border-color:#6366f1; }
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.08);
+  border-color: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .search-input {
+    width: 140px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 6px 8px;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    width: 120px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 6px 8px;
+    height: auto;
+  }
+}

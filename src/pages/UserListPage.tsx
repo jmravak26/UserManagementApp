@@ -108,11 +108,11 @@ const UserListPage: React.FC = () => {
           </div>
           <SearchBar onSearch={setFilter} placeholder="Search users..." />
           {canAddUsers && (
-            <button className="add-btn" onClick={() => setShowAdd(true)}>
+            <button className="btn btn-success" onClick={() => setShowAdd(true)}>
               + Add user
             </button>
           )}
-          <button className="logout-btn" onClick={handleLogout}>
+          <button className="btn btn-danger" onClick={handleLogout}>
             Logout
           </button>
         </div>

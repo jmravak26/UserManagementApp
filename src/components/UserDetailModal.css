@@ -28,10 +28,12 @@
   padding: 24px;
   width: 90%;
   max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   animation: zoomIn 0.2s ease-in;
-  position: relative; /* MAKE SURE this is present to establish a stacking context for .close-btn */
+  position: relative;
 }
 
 /* New Exit Keyframes */
@@ -110,7 +112,7 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.2s;
-  margin-right: 20px; /* Prevent collision with close button */
+  margin-right: 20px;
 }
 
 .edit-btn:hover {
@@ -274,11 +276,12 @@
   .modal-content {
     width: 95%;
     padding: 16px;
+    max-height: 85vh;
   }
   
   .detail-avatar {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
   }
   
   .edit-actions {
@@ -289,5 +292,37 @@
     flex-direction: column;
     gap: 10px;
     text-align: center;
+  }
+}
+
+/* Mobile landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal-content {
+    max-height: 95vh;
+    width: 80%;
+    max-width: 600px;
+    padding: 16px;
+  }
+  
+  .detail-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .modal-header {
+    margin-bottom: 12px;
+  }
+  
+  .edit-btn {
+    margin-right: 35px;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .edit-actions {
+    margin-top: 12px;
+    padding-top: 10px;
   }
 }

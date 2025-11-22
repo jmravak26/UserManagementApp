@@ -1,24 +1,55 @@
-.add-form { display:flex; flex-direction:column; gap:8px; }
-.input { padding:8px; border-radius:8px; border:1px solid #e6e9ef; }
-.form-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
-.btn { padding:8px 10px; border-radius:8px; border:none; }
-.btn.cancel { background:#f1f5f9; color:#0f172a; }
-.btn.cancel:hover { background:#dee0e2; color:#0f172a; }
-.btn.primary { background:#2563eb; color:white; font-weight:600; }
-.btn.primary:hover { background:#0d3691; color:white; font-weight:600; }
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-.error { color:#dc2626; font-size:12px; }
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
 
 /* Phone input styling to match existing form inputs */
 .phone-input .PhoneInputInput {
-  padding: 8px;
+  padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #e6e9ef;
   font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.phone-input .PhoneInputInput:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.08);
 }
 
 .phone-input .PhoneInputCountrySelect {
   border: 1px solid #e6e9ef;
   border-radius: 8px;
   margin-right: 4px;
+  transition: border-color 0.2s ease;
+}
+
+.phone-input .PhoneInputCountrySelect:focus {
+  outline: none;
+  border-color: #7c3aed;
+}
+
+/* Image preview styling */
+.image-preview {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  object-fit: cover;
 }

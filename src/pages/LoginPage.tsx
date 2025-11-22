@@ -59,7 +59,7 @@ const LoginPage: React.FC = () => {
               <Field name="password" type="password" className="input" />
               {errors.password && touched.password ? <div className="error">{errors.password}</div> : null}
 
-              <button className="btn" type="submit" disabled={isSubmitting}>
+              <button className="btn btn-primary login-btn" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Logging...' : 'Login'}
               </button>
             </Form>

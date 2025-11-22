@@ -1,11 +1,110 @@
 .modal-backdrop {
-  position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background: rgba(2,6,23,0.4); padding: 18px;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 23, 0.5);
+  padding: 18px;
   z-index: 2000;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.2s ease-out;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .modal {
-  width: 480px; background: white; border-radius: 12px; padding: 16px;
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideIn 0.2s ease-out;
 }
-.modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;}
-.modal .close { background: none; border: none; font-size: 18px; }
-.modal-body { padding-top: 12px; }
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.modal .close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: transform 0.3s ease-out, color 0.3s ease-out, background 0.2s ease;
+}
+
+.modal .close:hover {
+  background: #f3f4f6;
+  color: #ff4d4d;
+  transform: rotate(180deg);
+}
+
+.modal-body {
+  padding-top: 0;
+}
+
+@media (max-width: 520px) {
+  .modal {
+    margin: 16px;
+    padding: 20px;
+  }
+  
+  .modal-backdrop {
+    padding: 16px;
+  }
+}
+
+/* Mobile landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal {
+    max-height: 95vh;
+    width: 80%;
+    max-width: 600px;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  
+  .modal-backdrop {
+    padding: 12px;
+  }
+  
+  .modal-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+}

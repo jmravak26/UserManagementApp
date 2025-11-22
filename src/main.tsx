@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { store } from '../src/store';
 import './index.css';
+import './App.css';
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -31,7 +31,8 @@
 .selected-count {
   font-weight: 600;
   color: #1e293b;
-  font-size: 14px;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 .deselect-btn {
@@ -50,25 +51,15 @@
 .bulk-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
 .export-btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.export-btn:hover {
-  background: #2563eb;
+  font-size: 13px;
 }
 
 .role-assignment {
@@ -78,44 +69,23 @@
 }
 
 .role-select {
-  padding: 6px 8px;
+  padding: 4px 6px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
   background: white;
+  min-width: 70px;
 }
 
 .assign-role-btn {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.assign-role-btn:hover {
-  background: #059669;
 }
 
 .delete-btn {
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.delete-btn:hover {
-  background: #b91c1c;
+  font-size: 13px;
 }
 
 .delete-confirmation {
@@ -153,76 +123,97 @@
 }
 
 .cancel-btn {
-  background: #f3f4f6;
-  color: #374151;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
   font-size: 13px;
-  cursor: pointer;
-}
-
-.cancel-btn:hover {
-  background: #e5e7eb;
+  padding: 8px 16px;
 }
 
 .confirm-delete-btn {
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.confirm-delete-btn:hover {
-  background: #b91c1c;
+  padding: 8px 16px;
 }
 
 @media (max-width: 768px) {
   .bulk-actions-toolbar {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
-    padding: 10px 12px;
+    padding: 8px 12px;
+    gap: 8px;
   }
   
   .bulk-info {
     justify-content: center;
   }
   
+  .selected-count {
+    font-size: 12px;
+  }
+  
+  .deselect-btn {
+    font-size: 10px;
+  }
+  
   .bulk-actions {
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
+    flex-wrap: nowrap;
   }
   
   .role-assignment {
-    flex-direction: row;
-    gap: 6px;
-    align-items: center;
+    gap: 4px;
   }
   
   .role-select {
-    min-width: 80px;
+    min-width: 60px;
+    font-size: 11px;
+    padding: 3px 4px;
+  }
+  
+  .export-btn, .assign-role-btn, .delete-btn {
+    font-size: 11px;
+    padding: 4px 6px;
   }
 }
 
 @media (max-width: 480px) {
   .bulk-actions-toolbar {
-    padding: 8px 10px;
-  }
-  
-  .bulk-actions {
-    flex-direction: column;
-    align-items: center;
+    padding: 6px 8px;
     gap: 6px;
   }
   
+  .selected-count {
+    font-size: 11px;
+  }
+  
+  .deselect-btn {
+    font-size: 9px;
+  }
+  
+  .bulk-actions {
+    gap: 3px;
+    flex-wrap: nowrap;
+  }
+  
   .role-assignment {
-    width: 100%;
-    justify-content: center;
+    gap: 3px;
+  }
+  
+  .role-select {
+    min-width: 50px;
+    font-size: 10px;
+    padding: 2px 3px;
+  }
+  
+  .export-btn, .assign-role-btn, .delete-btn {
+    font-size: 9px;
+    padding: 2px 4px;
+    white-space: nowrap;
+  }
+  
+  .btn-icon {
+    display: none;
+  }
+  
+  .export-btn, .delete-btn {
+    gap: 0;
   }
 }

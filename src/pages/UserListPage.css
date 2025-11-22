@@ -45,20 +45,22 @@
 
 .actions { 
   display: flex; 
-  gap: 12px; 
+  gap: 8px; 
   align-items: center;
+  flex-wrap: nowrap;
 }
 
 .select-all-container {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
+  gap: 4px;
+  padding: 6px 8px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 12px;
   color: #475569;
+  white-space: nowrap;
 }
 
 .select-all-container input[type="checkbox"] {
@@ -71,12 +73,7 @@
   margin: 0;
   font-weight: 500;
 }
-.add-btn {
-  background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight:600;
-}
-.add-btn:hover {
-  background-color: #079767;
-}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
@@ -85,51 +82,40 @@
 }
 .loading, .empty { padding: 26px; text-align:center; color: #475569; }
 
-.logout-btn {
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
 
-.logout-btn:hover {
-  background-color: #c9302c;
-}
 
 .load-more-btn {
   margin-top: 24px;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
   border: none;
-  padding: 10px 18px;
+  padding: 12px 24px;
   border-radius: 25px;
   font-weight: 600;
-  font-size: 15px;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
   cursor: pointer;
   transition: all 0.25s ease-in-out;
 }
 
 .load-more-btn:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+  background: linear-gradient(135deg, #3730a3, #6b21a8);
 }
 
 .load-more-btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 /* Responsive design for mobile devices */
 @media (max-width: 768px) {
   .users-header h2 {
     cursor: default;
+    font-size: 18px;
   }
   
   .users-header h2::after {
@@ -139,32 +125,48 @@
   .users-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
   }
   
   .actions {
     width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 8px;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 4px;
   }
   
   .select-all-container {
     margin-left: 0;
+    padding: 4px 6px;
+    font-size: 11px;
   }
+  
+  /* If we want to hide the label on very small screens, uncomment below */
+  /* .select-all-container label {
+    display: none;
+  } */
 }
 
 @media (max-width: 480px) {
   .users-page {
-    padding: 16px;
+    padding: 12px;
+  }
+  
+  .users-header h2 {
+    font-size: 16px;
   }
   
   .actions {
-    gap: 6px;
+    gap: 3px;
   }
   
   .select-all-container {
-    font-size: 12px;
-    padding: 4px 8px;
+    font-size: 10px;
+    padding: 3px 5px;
+  }
+  
+  .btn {
+    padding: 6px 8px;
+    font-size: 11px;
   }
 }

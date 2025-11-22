@@ -48,32 +48,43 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     >
       {({ values, setFieldValue, errors, touched, isSubmitting }) => (
         <Form className="add-form">
-          <label>Full name</label>
-          <Field name="name" className="input" />
-          <ErrorMessage name="name" component="div" className="error" />
+          <div className="form-group">
+            <label className="label">Full name</label>
+            <Field name="name" className="input" />
+            <ErrorMessage name="name" component="div" className="error" />
+          </div>
 
-          <label>Username</label>
-          <Field name="username" className="input" />
-          <ErrorMessage name="username" component="div" className="error" />
+          <div className="form-group">
+            <label className="label">Username</label>
+            <Field name="username" className="input" />
+            <ErrorMessage name="username" component="div" className="error" />
+          </div>
 
-          <label>Email</label>
-          <Field name="email" className="input" />
-          <ErrorMessage name="email" component="div" className="error" />
+          <div className="form-group">
+            <label className="label">Email</label>
+            <Field name="email" className="input" />
+            <ErrorMessage name="email" component="div" className="error" />
+          </div>
 
-          <label>Birth Date</label>
-          <DatePicker
-            selected={values.birthDate}
-            onChange={(date) => setFieldValue('birthDate', date)}
-            dateFormat="dd/MM/yyyy"
-            className="input"
-            placeholderText="Select birth date"
-          />
-          {errors.birthDate && touched.birthDate && <div className="error">{errors.birthDate}</div>}
+          <div className="form-group">
+            <label className="label">Birth Date</label>
+            <DatePicker
+              selected={values.birthDate}
+              onChange={(date) => setFieldValue('birthDate', date)}
+              dateFormat="dd/MM/yyyy"
+              className="input"
+              placeholderText="Select birth date"
+            />
+            {errors.birthDate && touched.birthDate && <div className="error">{errors.birthDate}</div>}
+          </div>
 
-          <label>Avatar URL (optional)</label>
-          <Field name="avatarUrl" className="input" />
+          <div className="form-group">
+            <label className="label">Avatar URL (optional)</label>
+            <Field name="avatarUrl" className="input" />
+          </div>
 
-          <label>Phone Number (optional)</label>
+          <div className="form-group">
+            <label className="label">Phone Number (optional)</label>
           <PhoneInput
             placeholder="Enter phone number"
             value={values.phone}
@@ -81,30 +92,33 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             defaultCountry="HR"
             className="phone-input"
           />
-          {errors.phone && touched.phone && <div className="error">{errors.phone}</div>}
+            {errors.phone && touched.phone && <div className="error">{errors.phone}</div>}
+          </div>
 
-          {/* Role selection dropdown for user permissions */}
-          <label>Role</label>
-          <Field as="select" name="role" className="input">
-            <option value={UserRole.USER}>{UserRole.USER}</option>
-            <option value={UserRole.MANAGER}>{UserRole.MANAGER}</option>
-            <option value={UserRole.ADMIN}>{UserRole.ADMIN}</option>
-          </Field>
-          <ErrorMessage name="role" component="div" className="error" />
+          <div className="form-group">
+            <label className="label">Role</label>
+            <Field as="select" name="role" className="input">
+              <option value={UserRole.USER}>{UserRole.USER}</option>
+              <option value={UserRole.MANAGER}>{UserRole.MANAGER}</option>
+              <option value={UserRole.ADMIN}>{UserRole.ADMIN}</option>
+            </Field>
+            <ErrorMessage name="role" component="div" className="error" />
+          </div>
 
-          {/* Status selection for user activity */}
-          <label>Status</label>
-          <Field as="select" name="status" className="input">
-            <option value={UserStatus.ACTIVE}>{UserStatus.ACTIVE}</option>
-            <option value={UserStatus.INACTIVE}>{UserStatus.INACTIVE}</option>
-          </Field>
-          <ErrorMessage name="status" component="div" className="error" />
+          <div className="form-group">
+            <label className="label">Status</label>
+            <Field as="select" name="status" className="input">
+              <option value={UserStatus.ACTIVE}>{UserStatus.ACTIVE}</option>
+              <option value={UserStatus.INACTIVE}>{UserStatus.INACTIVE}</option>
+            </Field>
+            <ErrorMessage name="status" component="div" className="error" />
+          </div>
 
           <div className="form-actions">
-            <button type="button" className="btn cancel" onClick={onCancel}>
+            <button type="button" className="btn btn-secondary cancel-btn" onClick={onCancel}>
               Cancel
             </button>
-            <button type="submit" className="btn primary" disabled={isSubmitting}>
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
               {isSubmitting ? 'Adding...' : 'Add user'}
             </button>
           </div>

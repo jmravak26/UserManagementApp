@@ -53,8 +53,8 @@ const BulkActionsToolbar: React.FC<Props> = ({
       </div>
 
       <div className="bulk-actions">
-        <button className="export-btn" onClick={handleExportCSV}>
-          📊 Export CSV
+        <button className="btn btn-primary export-btn" onClick={handleExportCSV}>
+          <span className="btn-icon">📊</span> Export CSV
         </button>
 
         {canAssignRoles && (
@@ -68,7 +68,7 @@ const BulkActionsToolbar: React.FC<Props> = ({
               <option value={UserRole.MANAGER}>{UserRole.MANAGER}</option>
               <option value={UserRole.ADMIN}>{UserRole.ADMIN}</option>
             </select>
-            <button className="assign-role-btn" onClick={handleRoleChange}>
+            <button className="btn btn-success assign-role-btn" onClick={handleRoleChange}>
               Assign Role
             </button>
           </div>
@@ -76,10 +76,10 @@ const BulkActionsToolbar: React.FC<Props> = ({
 
         {canDelete && (
           <button 
-            className="delete-btn" 
+            className="btn btn-danger delete-btn" 
             onClick={() => setShowDeleteConfirm(true)}
           >
-            🗑️ Delete Selected
+            <span className="btn-icon">🗑️</span> Delete Selected
           </button>
         )}
       </div>
@@ -89,10 +89,10 @@ const BulkActionsToolbar: React.FC<Props> = ({
           <div className="confirmation-content">
             <p>Are you sure you want to delete {selectedCount} user{selectedCount !== 1 ? 's' : ''}?</p>
             <div className="confirmation-actions">
-              <button className="cancel-btn" onClick={() => setShowDeleteConfirm(false)}>
+              <button className="btn btn-secondary cancel-btn" onClick={() => setShowDeleteConfirm(false)}>
                 Cancel
               </button>
-              <button className="confirm-delete-btn" onClick={handleDeleteConfirm}>
+              <button className="btn btn-danger confirm-delete-btn" onClick={handleDeleteConfirm}>
                 Delete
               </button>
             </div>
