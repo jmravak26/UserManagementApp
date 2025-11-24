@@ -1,4 +1,4 @@
-HIGH-IMPACT FEATURES
+HIGH-IMPACT FEATURES 🗸🗸🗸
 1. User Roles & Permissions 🗸
 Add role dropdown (Admin, Manager, User) in the add/edit user form
 Implement role-based access control (different views/actions based on role)
@@ -15,7 +15,7 @@ Edit user functionality (inline or modal-based)
 User activity status (Active/Inactive toggle)
 
 MEDIUM-IMPACT FEATURES
-4. Advanced Filtering & Sorting
+4. Advanced Filtering & Sorting 🗸
 Filter by role, status, or date range
 Sort by name, email, join date, or role
 Save filter presets

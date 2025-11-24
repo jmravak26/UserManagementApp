@@ -10,6 +10,8 @@ import SearchBar from '../components/SearchBar';
 import AddUserModal from '../components/AddUserModal';
 import UserDetailModal from "../components/UserDetailModal";
 import BulkActionsToolbar from '../components/BulkActionsToolbar';
+import FilterSortPanel from '../components/FilterSortPanel';
+import type { FilterOptions, SortOptions, FilterPreset } from '../components/FilterSortPanel';
 import type { User } from "../types/User";
 import { UserRole } from '../types/User';
 import './UserListPage.css';
@@ -27,15 +29,44 @@ const UserListPage: React.FC = () => {
   const [filter, setFilter] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [filters, setFilters] = useState<FilterOptions>({ role: '', status: '', dateFrom: '', dateTo: '' });
+  const [sort, setSort] = useState<SortOptions>({ field: 'name', order: 'asc' });
+  const [presets, setPresets] = useState<FilterPreset[]>(() => {
+    const saved = localStorage.getItem('filterPresets');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // Initial fetch
   useEffect(() => {
     dispatch(fetchUsers(1));
   }, [dispatch]);
 
-  const filtered = items.filter((u) =>
-    u.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filtered = useMemo(() => {
+    let result = items.filter((u) =>
+      u.name.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    if (filters.role) result = result.filter(u => u.role === filters.role);
+    if (filters.status) result = result.filter(u => u.status === filters.status);
+    if (filters.dateFrom || filters.dateTo) {
+      result = result.filter(u => {
+        const [day, month, year] = u.birthDate.split('/');
+        const userDate = `${year}-${month}-${day}`;
+        if (filters.dateFrom && userDate < filters.dateFrom) return false;
+        if (filters.dateTo && userDate > filters.dateTo) return false;
+        return true;
+      });
+    }
+
+    result.sort((a, b) => {
+      const aVal = a[sort.field];
+      const bVal = b[sort.field];
+      const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+      return sort.order === 'asc' ? cmp : -cmp;
+    });
+
+    return result;
+  }, [items, filter, filters, sort]);
 
   const selectedUsers = useMemo(() => 
     items.filter(user => selectedUserIds.includes(user.id)), 
@@ -89,6 +120,23 @@ const UserListPage: React.FC = () => {
     dispatch(deselectAllUsers());
   };
 
+  const handleSavePreset = (preset: FilterPreset) => {
+    const updated = [...presets.filter(p => p.name !== preset.name), preset];
+    setPresets(updated);
+    localStorage.setItem('filterPresets', JSON.stringify(updated));
+  };
+
+  const handleLoadPreset = (preset: FilterPreset) => {
+    setFilters(preset.filters);
+    setSort(preset.sort);
+  };
+
+  const handleDeletePreset = (name: string) => {
+    const updated = presets.filter(p => p.name !== name);
+    setPresets(updated);
+    localStorage.setItem('filterPresets', JSON.stringify(updated));
+  };
+
   return (
     <div className="users-page">
       <header className="users-header">
@@ -125,6 +173,17 @@ const UserListPage: React.FC = () => {
         onBulkDelete={handleBulkDelete}
         onBulkRoleChange={handleBulkRoleChange}
         onDeselectAll={handleDeselectAll}
+      />
+
+      <FilterSortPanel
+        filters={filters}
+        sort={sort}
+        presets={presets}
+        onFilterChange={setFilters}
+        onSortChange={setSort}
+        onSavePreset={handleSavePreset}
+        onLoadPreset={handleLoadPreset}
+        onDeletePreset={handleDeletePreset}
       />
 
       <main>

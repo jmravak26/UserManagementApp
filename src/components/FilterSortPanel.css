@@ -1,0 +1,183 @@
+.filter-sort-panel {
+  background: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.panel-toggle {
+  width: 100%;
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-toggle:hover {
+  background: #0056b3;
+}
+
+.panel-content {
+  padding: 1rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.filter-section, .sort-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-section h3, .sort-section h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.filter-controls, .sort-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-controls select, .filter-controls input,
+.sort-controls select {
+  padding: 0.4rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.date-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.date-filter label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.date-filter input {
+  padding: 0.4rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.preset-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn-preset {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-preset:hover {
+  background: #5a6268;
+}
+
+.preset-content {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 4px;
+}
+
+.preset-save {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.preset-save input {
+  flex: 1;
+  padding: 0.4rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.preset-save button {
+  padding: 0.4rem 0.8rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.preset-save button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.preset-item {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.preset-item button {
+  flex: 1;
+  padding: 0.4rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.preset-item button:hover {
+  background: #0056b3;
+}
+
+.preset-item .btn-delete {
+  flex: 0;
+  width: 30px;
+  background: #dc3545;
+  text-align: center;
+}
+
+.preset-item .btn-delete:hover {
+  background: #c82333;
+}
+
+.btn-reset {
+  padding: 0.5rem 1rem;
+  background: #ffc107;
+  color: #212529;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  align-self: flex-start;
+}
+
+.btn-reset:hover {
+  background: #e0a800;
+}
