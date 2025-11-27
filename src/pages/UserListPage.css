@@ -112,6 +112,13 @@
 }
 
 /* Responsive design for mobile devices */
+@media (max-width: 1024px) {
+  .actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
 @media (max-width: 768px) {
   .users-header h2 {
     cursor: default;
@@ -125,26 +132,19 @@
   .users-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 12px;
   }
   
   .actions {
     width: 100%;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    gap: 4px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   
   .select-all-container {
-    margin-left: 0;
-    padding: 4px 6px;
-    font-size: 11px;
+    padding: 6px 8px;
+    font-size: 12px;
   }
-  
-  /* If we want to hide the label on very small screens, uncomment below */
-  /* .select-all-container label {
-    display: none;
-  } */
 }
 
 @media (max-width: 480px) {
@@ -157,16 +157,16 @@
   }
   
   .actions {
-    gap: 3px;
+    gap: 6px;
   }
   
   .select-all-container {
-    font-size: 10px;
-    padding: 3px 5px;
+    font-size: 11px;
+    padding: 5px 7px;
   }
   
   .btn {
-    padding: 6px 8px;
-    font-size: 11px;
+    padding: 7px 10px;
+    font-size: 12px;
   }
 }

@@ -20,7 +20,7 @@ Filter by role, status, or date range
 Sort by name, email, join date, or role
 Save filter presets
 
-5. Data Export/Import
+5. Data Export/Import 🗸
 Export user list to CSV/Excel
 Import users from CSV file
 Print-friendly user directory

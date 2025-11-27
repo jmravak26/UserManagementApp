@@ -117,6 +117,12 @@ const usersSlice = createSlice({
       
       savePersistedUsers(state.localItems);
     },
+    bulkImportUsers(state, action) {
+      const importedUsers = action.payload as User[];
+      state.localItems = [...importedUsers, ...state.localItems];
+      state.items = [...importedUsers, ...state.items];
+      savePersistedUsers(state.localItems);
+    },
     resetUsers: () => CLEAN_STATE
   },
   extraReducers: (builder) => {
@@ -150,5 +156,5 @@ const usersSlice = createSlice({
   }
 });
 
-export const { addLocalUser, updateUser, bulkDeleteUsers, bulkUpdateUserRoles, resetUsers } = usersSlice.actions;
+export const { addLocalUser, updateUser, bulkDeleteUsers, bulkUpdateUserRoles, bulkImportUsers, resetUsers } = usersSlice.actions;
 export default usersSlice.reducer;

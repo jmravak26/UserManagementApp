@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
-import { fetchUsers, addLocalUser, updateUser, resetUsers, bulkDeleteUsers, bulkUpdateUserRoles } from '../store/userSlice';
+import { fetchUsers, addLocalUser, updateUser, resetUsers, bulkDeleteUsers, bulkUpdateUserRoles, bulkImportUsers } from '../store/userSlice';
 import { toggleUserSelection, selectAllUsers, deselectAllUsers, removeDeletedUsers } from '../store/selectionSlice';
 import { logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,8 @@ import AddUserModal from '../components/AddUserModal';
 import UserDetailModal from "../components/UserDetailModal";
 import BulkActionsToolbar from '../components/BulkActionsToolbar';
 import FilterSortPanel from '../components/FilterSortPanel';
+import ImportPanel from '../components/ImportPanel';
+import PrintButton from '../components/PrintButton';
 import type { FilterOptions, SortOptions, FilterPreset } from '../components/FilterSortPanel';
 import type { User } from "../types/User";
 import { UserRole } from '../types/User';
@@ -137,6 +139,10 @@ const UserListPage: React.FC = () => {
     localStorage.setItem('filterPresets', JSON.stringify(updated));
   };
 
+  const handleImportUsers = (users: User[]) => {
+    dispatch(bulkImportUsers(users));
+  };
+
   return (
     <div className="users-page">
       <header className="users-header">
@@ -155,6 +161,8 @@ const UserListPage: React.FC = () => {
             <label htmlFor="select-all">Select All</label>
           </div>
           <SearchBar onSearch={setFilter} placeholder="Search users..." />
+          <ImportPanel onImport={handleImportUsers} />
+          <PrintButton allUsers={filtered} selectedUsers={selectedUsers} />
           {canAddUsers && (
             <button className="btn btn-success" onClick={() => setShowAdd(true)}>
               + Add user

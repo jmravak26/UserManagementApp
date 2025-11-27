@@ -1,0 +1,45 @@
+.btn-import {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-import {
+  background: #007bff;
+  color: white;
+}
+
+.btn-import:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.btn-import:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.import-errors {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  max-width: 400px;
+  padding: 10px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  color: #721c24;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.import-errors ul {
+  margin: 5px 0 0 20px;
+  padding: 0;
+}
+
+.import-errors li {
+  margin: 3px 0;
+}

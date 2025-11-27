@@ -52,7 +52,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .export-btn {
@@ -136,8 +136,8 @@
   .bulk-actions-toolbar {
     flex-direction: column;
     align-items: stretch;
-    padding: 8px 12px;
-    gap: 8px;
+    padding: 10px 12px;
+    gap: 10px;
   }
   
   .bulk-info {
@@ -149,13 +149,13 @@
   }
   
   .deselect-btn {
-    font-size: 10px;
+    font-size: 11px;
   }
   
   .bulk-actions {
     justify-content: center;
-    gap: 6px;
-    flex-wrap: nowrap;
+    gap: 8px;
+    flex-wrap: wrap;
   }
   
   .role-assignment {
@@ -176,8 +176,8 @@
 
 @media (max-width: 480px) {
   .bulk-actions-toolbar {
-    padding: 6px 8px;
-    gap: 6px;
+    padding: 8px 10px;
+    gap: 8px;
   }
   
   .selected-count {
@@ -185,35 +185,27 @@
   }
   
   .deselect-btn {
-    font-size: 9px;
+    font-size: 10px;
   }
   
   .bulk-actions {
-    gap: 3px;
-    flex-wrap: nowrap;
+    gap: 6px;
+    flex-wrap: wrap;
   }
   
   .role-assignment {
-    gap: 3px;
+    gap: 4px;
   }
   
   .role-select {
-    min-width: 50px;
-    font-size: 10px;
-    padding: 2px 3px;
+    min-width: 60px;
+    font-size: 11px;
+    padding: 4px 6px;
   }
   
   .export-btn, .assign-role-btn, .delete-btn {
-    font-size: 9px;
-    padding: 2px 4px;
+    font-size: 11px;
+    padding: 6px 10px;
     white-space: nowrap;
-  }
-  
-  .btn-icon {
-    display: none;
-  }
-  
-  .export-btn, .delete-btn {
-    gap: 0;
   }
 }
