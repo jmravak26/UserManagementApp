@@ -103,6 +103,21 @@
   align-items: center;
 }
 
+.email-btn {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.email-btn:hover {
+  background: #138496;
+}
+
 .edit-btn {
   background: #007bff;
   color: white;

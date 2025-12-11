@@ -13,6 +13,8 @@ import BulkActionsToolbar from '../components/BulkActionsToolbar';
 import FilterSortPanel from '../components/FilterSortPanel';
 import ImportPanel from '../components/ImportPanel';
 import PrintButton from '../components/PrintButton';
+import EmailModal from '../components/EmailModal';
+import MessageHistoryModal from '../components/MessageHistoryModal';
 import type { FilterOptions, SortOptions, FilterPreset } from '../components/FilterSortPanel';
 import type { User } from "../types/User";
 import { UserRole } from '../types/User';
@@ -37,6 +39,8 @@ const UserListPage: React.FC = () => {
     const saved = localStorage.getItem('filterPresets');
     return saved ? JSON.parse(saved) : [];
   });
+  const [emailRecipients, setEmailRecipients] = useState<User[]>([]);
+  const [showMessageHistory, setShowMessageHistory] = useState(false);
 
   // Initial fetch
   useEffect(() => {
@@ -143,6 +147,14 @@ const UserListPage: React.FC = () => {
     dispatch(bulkImportUsers(users));
   };
 
+  const handleSendEmail = (recipients: User[]) => {
+    setEmailRecipients(recipients);
+  };
+
+  const handleSendBulkEmail = () => {
+    handleSendEmail(selectedUsers);
+  };
+
   return (
     <div className="users-page">
       <header className="users-header">
@@ -161,6 +173,9 @@ const UserListPage: React.FC = () => {
             <label htmlFor="select-all">Select All</label>
           </div>
           <SearchBar onSearch={setFilter} placeholder="Search users..." />
+          <button className="btn btn-info" onClick={() => setShowMessageHistory(true)}>
+            📧 Message History
+          </button>
           <ImportPanel onImport={handleImportUsers} />
           <PrintButton allUsers={filtered} selectedUsers={selectedUsers} />
           {canAddUsers && (
@@ -181,6 +196,7 @@ const UserListPage: React.FC = () => {
         onBulkDelete={handleBulkDelete}
         onBulkRoleChange={handleBulkRoleChange}
         onDeselectAll={handleDeselectAll}
+        onSendEmail={handleSendBulkEmail}
       />
 
       <FilterSortPanel
@@ -236,8 +252,20 @@ const UserListPage: React.FC = () => {
           user={selectedUser}
           onClose={() => setSelectedUser(null)}
           onSave={handleUserUpdate}
-          canEdit={canAddUsers} // Only Admin/Manager can edit users
+          canEdit={canAddUsers}
+          onSendEmail={(user) => handleSendEmail([user])}
         />
+      )}
+
+      {emailRecipients.length > 0 && (
+        <EmailModal
+          recipients={emailRecipients}
+          onClose={() => setEmailRecipients([])}
+        />
+      )}
+
+      {showMessageHistory && (
+        <MessageHistoryModal onClose={() => setShowMessageHistory(false)} />
       )}
     </div>
   );

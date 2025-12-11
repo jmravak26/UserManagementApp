@@ -55,6 +55,13 @@
   flex-wrap: wrap;
 }
 
+.send-email-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
 .export-btn {
   display: flex;
   align-items: center;

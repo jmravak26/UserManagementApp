@@ -12,6 +12,7 @@ type Props = {
   onBulkDelete: () => void;
   onBulkRoleChange: (role: UserRole) => void;
   onDeselectAll: () => void;
+  onSendEmail: () => void;
 };
 
 const BulkActionsToolbar: React.FC<Props> = ({
@@ -20,7 +21,8 @@ const BulkActionsToolbar: React.FC<Props> = ({
   currentUserRole,
   onBulkDelete,
   onBulkRoleChange,
-  onDeselectAll
+  onDeselectAll,
+  onSendEmail
 }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole>(UserRole.USER);
@@ -53,6 +55,10 @@ const BulkActionsToolbar: React.FC<Props> = ({
       </div>
 
       <div className="bulk-actions">
+        <button className="btn btn-info send-email-btn" onClick={onSendEmail}>
+          <span className="btn-icon">✉️</span> Send Email
+        </button>
+
         <button className="btn btn-primary export-btn" onClick={handleExportCSV}>
           <span className="btn-icon">📊</span> Export CSV
         </button>
@@ -110,6 +116,7 @@ const BulkActionsToolbar: React.FC<Props> = ({
   onBulkDelete: PropTypes.func.isRequired,
   onBulkRoleChange: PropTypes.func.isRequired,
   onDeselectAll: PropTypes.func.isRequired,
+  onSendEmail: PropTypes.func.isRequired,
 };
 
 export default BulkActionsToolbar;

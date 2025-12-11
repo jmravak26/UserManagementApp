@@ -9,6 +9,7 @@ interface UserDetailModalProps {
   onClose: () => void;
   onSave?: (updatedUser: User) => void;
   canEdit?: boolean;
+  onSendEmail?: (user: User) => void;
 }
 
 const EXIT_DURATION = 200; // Must match the CSS animation duration (0.2s)
@@ -17,7 +18,8 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
   user, 
   onClose, 
   onSave, 
-  canEdit = false 
+  canEdit = false,
+  onSendEmail
 }) => {
   const [isExiting, setIsExiting] = useState(false);  
   const [isEditing, setIsEditing] = useState(false);  
@@ -66,6 +68,11 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
         <div className="modal-header">
           <h2>User Profile</h2>
           <div className="header-actions">
+            {onSendEmail && !isEditing && (
+              <button className="email-btn" onClick={() => onSendEmail(user)}>
+                ✉️ Email
+              </button>
+            )}
             {canEdit && !isEditing && (
               <button className="edit-btn" onClick={() => setIsEditing(true)}>
                 ✏️ Edit

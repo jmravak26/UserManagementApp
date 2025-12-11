@@ -25,7 +25,7 @@ Export user list to CSV/Excel
 Import users from CSV file
 Print-friendly user directory
 
-6. Communication Features
+6. Communication Features 🗸
 Send email to individual users or groups
 Email templates for common messages
 Message history/log
