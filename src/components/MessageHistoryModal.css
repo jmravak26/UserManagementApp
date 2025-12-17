@@ -5,6 +5,36 @@
   overflow-y: auto;
 }
 
+@media (max-width: 520px) {
+  .message-history-modal {
+    margin: 16px;
+    padding: 20px;
+  }
+}
+
+/* Mobile landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .message-history-modal {
+    max-height: 95vh;
+    width: 80%;
+    max-width: 600px;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  
+  .message-history-modal .modal-header {
+    margin-bottom: 12px;
+  }
+  
+  .message-item {
+    padding: 10px;
+  }
+  
+  .no-messages {
+    padding: 20px;
+  }
+}
+
 .message-history-modal .modal-header {
   display: flex;
   justify-content: space-between;

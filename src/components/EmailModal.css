@@ -70,3 +70,29 @@
   background: #6c757d;
   color: white;
 }
+
+@media (max-width: 520px) {
+  .email-modal {
+    margin: 16px;
+    padding: 20px;
+  }
+}
+
+/* Mobile landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .email-modal {
+    max-height: 95vh;
+    width: 80%;
+    max-width: 600px;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  
+  .email-modal .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .modal-actions {
+    margin-top: 12px;
+  }
+}
