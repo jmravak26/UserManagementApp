@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import UserListPage from './pages/UserListPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 import { useAppSelector } from './hooks/useAppSelector';
 
 const App: React.FC = () => {
@@ -12,6 +13,7 @@ const App: React.FC = () => {
       <Route path="/" element={<Navigate to={token ? '/users' : '/login'} replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/users" element={token ? <UserListPage /> : <Navigate to="/login" replace />} />
+      <Route path="/analytics" element={token ? <AnalyticsPage /> : <Navigate to="/login" replace />} />
       <Route path="*" element={<div style={{ padding: 24 }}>404 - Not Found</div>} />
     </Routes>
   );

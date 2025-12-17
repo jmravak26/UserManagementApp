@@ -22,8 +22,8 @@ const getDefaultStatus = (userId: number): UserStatus => {
 
 // Helper function to generate random birth dates
 const getRandomBirthDate = (): string => {
-  const start = new Date(1970, 0, 1);
-  const end = new Date(2000, 11, 31);
+  const start = new Date(2000, 1, 1);
+  const end = new Date(2025, 12, 31);
   const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   const day = randomDate.getDate().toString().padStart(2, '0');
   const month = (randomDate.getMonth() + 1).toString().padStart(2, '0');

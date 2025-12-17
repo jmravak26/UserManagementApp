@@ -14,7 +14,7 @@ Click on user to open detailed profile modal
 Edit user functionality (inline or modal-based)
 User activity status (Active/Inactive toggle)
 
-MEDIUM-IMPACT FEATURES
+MEDIUM-IMPACT FEATURES 🗸🗸🗸
 4. Advanced Filtering & Sorting 🗸
 Filter by role, status, or date range
 Sort by name, email, join date, or role
@@ -31,16 +31,15 @@ Email templates for common messages
 Message history/log
 
 NICE-TO-HAVE FEATURES
-7. User Analytics Dashboard
-User registration trends
+7. User Analytics Dashboard 🗸
+User registration trends (last 6 calendar months)
 Role distribution charts
-Activity metrics
+Activity metrics (active/inactive status)
 
 8. Enhanced Authentication
 Social login (Google/Facebook)
 Password reset functionality
 Two-factor authentication
 
-9. Phone Number Management
+9. Phone Number Management 🗸
 Add phone field with country code dropdown
-SMS notifications capability

@@ -173,6 +173,9 @@ const UserListPage: React.FC = () => {
             <label htmlFor="select-all">Select All</label>
           </div>
           <SearchBar onSearch={setFilter} placeholder="Search users..." />
+          <button className="btn btn-info" onClick={() => navigate('/analytics')}>
+            📊 Analytics
+          </button>
           <button className="btn btn-info" onClick={() => setShowMessageHistory(true)}>
             📧 Message History
           </button>
