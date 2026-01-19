@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { UserRole } from '../types/User';
 import './RoleBadge.css';
 
@@ -28,11 +27,6 @@ const RoleBadge: React.FC<Props> = ({ role }) => {
       {role}
     </span>
   );
-};
-
-// PropTypes validation as requested in requirements
-(RoleBadge as any).propTypes = {
-  role: PropTypes.oneOf(Object.values(UserRole)).isRequired,
 };
 
 export default RoleBadge;

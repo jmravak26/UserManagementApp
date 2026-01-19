@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { UserRole } from '../types/User';
 import type { User } from '../types/User';
 import { exportUsersToCSV } from '../utils/csvExport';
@@ -107,16 +106,6 @@ const BulkActionsToolbar: React.FC<Props> = ({
       )}
     </div>
   );
-};
-
-(BulkActionsToolbar as any).propTypes = {
-  selectedCount: PropTypes.number.isRequired,
-  selectedUsers: PropTypes.array.isRequired,
-  currentUserRole: PropTypes.oneOf(Object.values(UserRole)),
-  onBulkDelete: PropTypes.func.isRequired,
-  onBulkRoleChange: PropTypes.func.isRequired,
-  onDeselectAll: PropTypes.func.isRequired,
-  onSendEmail: PropTypes.func.isRequired,
 };
 
 export default BulkActionsToolbar;

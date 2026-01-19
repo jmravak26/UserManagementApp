@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useAppSelector } from '../hooks/useAppSelector';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { clearHistory } from '../store/messageSlice';
@@ -55,7 +54,3 @@ export default function MessageHistoryModal({ onClose }: MessageHistoryModalProp
     </div>
   );
 }
-
-MessageHistoryModal.propTypes = {
-  onClose: PropTypes.func.isRequired
-};

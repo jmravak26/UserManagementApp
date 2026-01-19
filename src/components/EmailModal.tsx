@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { sendMessage } from '../store/messageSlice';
 import { EmailTemplates } from '../types/Message';
@@ -79,8 +78,3 @@ export default function EmailModal({ recipients, onClose }: EmailModalProps) {
     </div>
   );
 }
-
-EmailModal.propTypes = {
-  recipients: PropTypes.array.isRequired,
-  onClose: PropTypes.func.isRequired
-};

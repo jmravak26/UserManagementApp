@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import type { User } from '../types/User';
 import { printUserDirectory } from '../utils/printDirectory';
 import './PrintButton.css';
@@ -24,11 +23,6 @@ const PrintButton: React.FC<PrintButtonProps> = ({ allUsers, selectedUsers }) =>
       🖨️ Print {selectedUsers.length > 0 ? `(${selectedUsers.length})` : ''}
     </button>
   );
-};
-
-PrintButton.propTypes = {
-  allUsers: PropTypes.array.isRequired,
-  selectedUsers: PropTypes.array.isRequired
 };
 
 export default PrintButton;

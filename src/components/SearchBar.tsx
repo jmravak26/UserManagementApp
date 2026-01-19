@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import './SearchBar.css';
 
 type Props = {
@@ -26,11 +25,6 @@ const SearchBar: React.FC<Props> = ({ onSearch, placeholder }) => {
       onChange={(e) => setQ(e.target.value)}
     />
   );
-};
-
-(SearchBar as any).propTypes = {
-  onSearch: PropTypes.func.isRequired,
-  placeholder: PropTypes.string
 };
 
 export default SearchBar;

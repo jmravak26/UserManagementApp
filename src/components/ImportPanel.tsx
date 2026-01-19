@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import type { User } from '../types/User';
 import { importUsersFromCSV } from '../utils/csvImport';
 import './ImportPanel.css';
@@ -59,10 +58,6 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ onImport }) => {
       )}
     </>
   );
-};
-
-ImportPanel.propTypes = {
-  onImport: PropTypes.func.isRequired
 };
 
 export default ImportPanel;

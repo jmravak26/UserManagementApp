@@ -11,7 +11,7 @@ libraries:
 - Use redux-thunk or redux-saga for async operations
 - Use one of the following libraries for form handling: formik, final-form (react
 final-form) or redux-form
-- Use prop-types for each component
+- Use prop-types for each component (OBSOLETE -> removed props in later app versions)
 - Use axios or fetch for API communication
 
 ***Requirements:***
@@ -39,13 +39,13 @@ uploaded anywhere, and user can have some dummy URL for the avatar)
 - **State mgmt:**       Redux Toolkit + redux-thunk. _Can be replaced with commonly used React Hooks_
 - **API calls:**        Axios. _Can be replaced with fetch API_
 - **Forms:**            Formik.
-- **Prop validation:**  PropTypes included (as requested by assignment). _TypeScript already included_
+- **Prop validation:**  TypeScript provides compile-time type safety (PropTypes removed as redundant)
 - **Styles:**           Plain CSS files per component (for learning clarity). _Can be replaced with commonly used TailWind CSS_
 - **Routing:**          React Router.
 - **Login:**            Mock login (no real API call).
 
 ## Notes / Design decisions
-- TypeScript chosen to increase code safety. PropTypes are still added to components to match the PDF requirement.
+- TypeScript chosen to increase code safety and provide excellent IDE support with autocomplete and type checking.
 - Redux Toolkit provides concise reducers and includes good defaults. Thunks are used for async fetch (simple and expected by the task).
 - Axios for simple HTTP helper; users data is fetched from https://jsonplaceholder.typicode.com/
 - Mock login keeps the flow simple; the login stores a client-side token in Redux and protects the /users route.

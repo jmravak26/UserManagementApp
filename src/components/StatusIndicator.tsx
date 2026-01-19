@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { UserStatus } from '../types/User';
 import './StatusIndicator.css';
 
@@ -16,11 +15,6 @@ const StatusIndicator: React.FC<Props> = ({ status, size = 'small' }) => {
       <span className="status-text">{status}</span>
     </div>
   );
-};
-
-(StatusIndicator as any).propTypes = {
-  status: PropTypes.oneOf(Object.values(UserStatus)).isRequired,
-  size: PropTypes.oneOf(['small', 'medium', 'large'])
 };
 
 export default StatusIndicator;

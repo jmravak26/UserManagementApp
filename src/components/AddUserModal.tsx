@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AddUserForm from '../forms/AddUserForm';
 import type { User } from '../types/User';
 import { UserStatus } from '../types/User';
@@ -50,12 +49,6 @@ const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
       </div>
     </div>
   );
-};
-
-(AddUserModal as any).propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onAdd: PropTypes.func.isRequired
 };
 
 export default AddUserModal;

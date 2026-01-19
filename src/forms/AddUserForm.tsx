@@ -1,6 +1,5 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
 import PhoneInput from 'react-phone-number-input';
@@ -126,11 +125,6 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
       )}
     </Formik>
   );
-};
-
-(AddUserForm as any).propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  onCancel: PropTypes.func
 };
 
 export default AddUserForm;

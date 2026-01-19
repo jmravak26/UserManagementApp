@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { UserRole, UserStatus } from '../types/User';
 import './FilterSortPanel.css';
 
@@ -153,29 +152,6 @@ const FilterSortPanel: React.FC<FilterSortPanelProps> = ({
       )}
     </div>
   );
-};
-
-FilterSortPanel.propTypes = {
-  filters: PropTypes.shape({
-    role: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    dateFrom: PropTypes.string.isRequired,
-    dateTo: PropTypes.string.isRequired
-  }).isRequired,
-  sort: PropTypes.shape({
-    field: PropTypes.oneOf(['name', 'email', 'birthDate', 'role']).isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired
-  }).isRequired,
-  presets: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    filters: PropTypes.object.isRequired,
-    sort: PropTypes.object.isRequired
-  }).isRequired).isRequired,
-  onFilterChange: PropTypes.func.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-  onSavePreset: PropTypes.func.isRequired,
-  onLoadPreset: PropTypes.func.isRequired,
-  onDeletePreset: PropTypes.func.isRequired
 };
 
 export default FilterSortPanel;
