@@ -2,7 +2,7 @@ import axios from 'axios';
 import { UserRole, UserStatus } from '../types/User';
 
 const api = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://jsonplaceholder.typicode.com',
   timeout: 5000
 });
 

@@ -11,11 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies
+        run: |
+          cd user-management-app
+          npm ci
+      - name: Build project
+        run: |
+          cd user-management-app
+          npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_REACT_USR_MGMT_APP }}
           channelId: live
           projectId: react-usr-mgmt-app
+          entryPoint: ./user-management-app
