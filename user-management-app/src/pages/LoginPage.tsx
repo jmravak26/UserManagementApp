@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { loginStart, loginSuccess, loginFail } from '../store/authSlice';
 import { UserRole } from '../types/User';
+import { useDatabaseMode } from '../contexts/DatabaseModeContext';
 import './LoginPage.css';
 
 // Helper function to determine user role based on email
@@ -22,11 +23,44 @@ const LoginSchema = Yup.object().shape({
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { mode, setMode } = useDatabaseMode();
 
   return (
     <div className="login-page">
       <div className="login-card">
         <h1 className="brand">User Management</h1>
+
+        <div className="database-mode-selector">
+          <h3>Database Mode</h3>
+          <div className="mode-options">
+            <label className="mode-option">
+              <input 
+                type="radio" 
+                name="dbMode" 
+                value="real" 
+                checked={mode === 'real'}
+                onChange={() => setMode('real')}
+              />
+              <span className="mode-label">
+                <strong>Real Backend</strong>
+                <small>Local Node.js API</small>
+              </span>
+            </label>
+            <label className="mode-option">
+              <input 
+                type="radio" 
+                name="dbMode" 
+                value="mock" 
+                checked={mode === 'mock'}
+                onChange={() => setMode('mock')}
+              />
+              <span className="mode-label">
+                <strong>Mock Database</strong>
+                <small>JSONPlaceholder API</small>
+              </span>
+            </label>
+          </div>
+        </div>
 
         <Formik
           initialValues={{ email: '', password: '' }}

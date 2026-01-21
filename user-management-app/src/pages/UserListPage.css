@@ -6,15 +6,44 @@
 
 .users-header { 
   display: flex; 
-  justify-content: space-between; 
   align-items: center; 
   margin-bottom: 18px;
+  gap: 16px;
+}
+
+.mode-indicator {
+  flex-shrink: 0;
+}
+
+.mode-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}
+
+.mode-badge.real {
+  background: #10b981;
+}
+
+.mode-badge.mock {
+  background: #f59e0b;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex; 
+  gap: 8px; 
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .users-header h2 {
   margin: 0;
   position: relative;
   cursor: help;
+  flex-shrink: 0;
 }
 
 /* Hover tooltip for role info */
@@ -41,13 +70,6 @@
   opacity: 1;
   visibility: visible;
   transform: translateY(-8px);
-}
-
-.actions { 
-  display: flex; 
-  gap: 8px; 
-  align-items: center;
-  flex-wrap: nowrap;
 }
 
 .select-all-container {

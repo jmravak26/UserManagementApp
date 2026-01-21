@@ -5,6 +5,7 @@ import { fetchUsers, addLocalUser, updateUser, resetUsers, bulkDeleteUsers, bulk
 import { toggleUserSelection, selectAllUsers, deselectAllUsers, removeDeletedUsers } from '../store/selectionSlice';
 import { logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { useDatabaseMode } from '../contexts/DatabaseModeContext';
 import UserCard from '../components/UserCard';
 import SearchBar from '../components/SearchBar';
 import AddUserModal from '../components/AddUserModal';
@@ -23,6 +24,7 @@ import './UserListPage.css';
 const UserListPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { mode } = useDatabaseMode();
 
   const { items, loading, hasMore, page } = useAppSelector((s) => s.users);
   const { userRole } = useAppSelector((s) => s.auth);
@@ -44,8 +46,8 @@ const UserListPage: React.FC = () => {
 
   // Initial fetch
   useEffect(() => {
-    dispatch(fetchUsers(1));
-  }, [dispatch]);
+    dispatch(fetchUsers({ page: 1, mode }));
+  }, [dispatch, mode]);
 
   const filtered = useMemo(() => {
     let result = items.filter((u) =>
@@ -96,7 +98,7 @@ const UserListPage: React.FC = () => {
 
   const handleLoadMore = () => {
     if (!loading && hasMore) {
-      dispatch(fetchUsers(page + 1));
+      dispatch(fetchUsers({ page: page + 1, mode }));
     }
   };
 
@@ -159,6 +161,11 @@ const UserListPage: React.FC = () => {
     <div className="users-page">
       <header className="users-header">
         <h2 data-role={`Logged in as: ${userRole}`}>Users</h2>
+        <div className="mode-indicator">
+          <span className={`mode-badge ${mode}`}>
+            {mode === 'real' ? '🔧 Real Backend' : '🎭 Mock Data'}
+          </span>
+        </div>
         <div className="actions">
           <div className="select-all-container">
             <input

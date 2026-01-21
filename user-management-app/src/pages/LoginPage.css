@@ -20,6 +20,60 @@
   color: #0f172a;
 }
 
+.database-mode-selector {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.database-mode-selector h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.mode-option:hover {
+  background: #e2e8f0;
+}
+
+.mode-option input[type="radio"] {
+  margin: 0;
+}
+
+.mode-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.mode-label strong {
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.mode-label small {
+  font-size: 11px;
+  color: #6b7280;
+}
+
 .login-form { display: flex; flex-direction: column; gap: 8px; }
 
 .login-btn {

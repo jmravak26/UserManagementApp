@@ -25,9 +25,9 @@ const savePersistedUsers = (users: User[]) => {
   }
 };
 
-// Updated thunk to support pagination
-export const fetchUsers = createAsyncThunk('users/fetch', async (page: number = 1) => {
-  const { data, hasMore } = await getUsers(page);
+// Updated thunk to support pagination and database mode
+export const fetchUsers = createAsyncThunk('users/fetch', async ({ page = 1, mode = 'real' }: { page?: number, mode?: 'mock' | 'real' }) => {
+  const { data, hasMore } = await getUsers(page, mode);
   return { data, page, hasMore };
 });
 

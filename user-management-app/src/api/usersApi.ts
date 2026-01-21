@@ -1,12 +1,9 @@
 import axios from 'axios';
 import { UserRole, UserStatus } from '../types/User';
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://jsonplaceholder.typicode.com',
-  timeout: 5000
-});
+type DatabaseMode = 'mock' | 'real';
 
-// Helper function to assign default roles to API users
+// Helper function to assign default roles to API users (for JSONPlaceholder)
 const getDefaultRole = (userId: number): UserRole => {
   // Assign roles based on user ID for demo purposes
   if (userId === 1) return UserRole.ADMIN;
@@ -14,13 +11,13 @@ const getDefaultRole = (userId: number): UserRole => {
   return UserRole.USER;
 };
 
-// Helper function to assign default status to API users
+// Helper function to assign default status to API users (for JSONPlaceholder)
 const getDefaultStatus = (userId: number): UserStatus => {
   // Most users are active, some inactive for demo purposes (every 7th user inactive)
   return userId % 7 === 0 ? UserStatus.INACTIVE : UserStatus.ACTIVE;
 };
 
-// Helper function to generate random birth dates
+// Helper function to generate random birth dates (for JSONPlaceholder)
 const getRandomBirthDate = (): string => {
   const start = new Date(2000, 1, 1);
   const end = new Date(2025, 12, 31);
@@ -31,28 +28,59 @@ const getRandomBirthDate = (): string => {
   return `${day}/${month}/${year}`;
 };
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 4; // Used for JSONPlaceholder pagination
 
-export const getUsers = async (page = 1) => {
-  const res = await api.get('/users');
-  // Map API users and assign default roles and birth dates
-  const allUsers = res.data.map((u: any) => ({
-    id: u.id,
-    name: u.name,
-    username: u.username,
-    email: u.email,
-    avatar: `https://i.pravatar.cc/150?u=${u.id}`,
-    role: getDefaultRole(u.id),
-    birthDate: getRandomBirthDate(),
-    phone: undefined,
-    status: getDefaultStatus(u.id)
-  }));
+// API configuration based on mode
+const getApiConfig = (mode: DatabaseMode) => {
+  if (mode === 'mock') {
+    return {
+      baseURL: 'https://jsonplaceholder.typicode.com',
+      endpoint: '/users',
+      transform: true
+    };
+  } else {
+    return {
+      baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001',
+      endpoint: '/api/users',
+      transform: false
+    };
+  }
+};
 
-  const start = (page - 1) * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
-  const paginated = allUsers.slice(start, end);
+export const getUsers = async (page = 1, mode: DatabaseMode = 'real') => {
+  const config = getApiConfig(mode);
+  
+  const api = axios.create({
+    baseURL: config.baseURL,
+    timeout: 5000
+  });
 
-  const hasMore = end < allUsers.length;
+  if (mode === 'mock') {
+    // JSONPlaceholder version
+    const res = await api.get(config.endpoint);
+    // Map API users and assign default roles and birth dates
+    const allUsers = res.data.map((u: any) => ({
+      id: u.id,
+      name: u.name,
+      username: u.username,
+      email: u.email,
+      avatar: `https://i.pravatar.cc/150?u=${u.id}`,
+      role: getDefaultRole(u.id),
+      birthDate: getRandomBirthDate(),
+      phone: undefined,
+      status: getDefaultStatus(u.id)
+    }));
 
-  return { data: paginated, hasMore };
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const paginated = allUsers.slice(start, end);
+
+    const hasMore = end < allUsers.length;
+
+    return { data: paginated, hasMore };
+  } else {
+    // Real backend version
+    const res = await api.get(config.endpoint, { params: { page } });
+    return res.data;
+  }
 };
