@@ -32,7 +32,7 @@ npm run dev
 
 The application supports two data sources:
 
-- **Real Backend**: Local Node.js API with mock data (http://localhost:3001)
+- **Real Backend**: Local Node.js API with SQLite database (http://localhost:3001)
 - **Mock Database**: JSONPlaceholder API for demo purposes
 
 Switch between modes on the login page. Your choice is saved and persists across sessions.
@@ -84,6 +84,7 @@ VITE_API_BASE_URL=http://localhost:3001
 NODE_ENV=development
 PORT=3001
 FRONTEND_URL=http://localhost:5173
+DATABASE_URL="file:./database.db"
 ```
 
 ## Technology Stack
@@ -98,7 +99,7 @@ FRONTEND_URL=http://localhost:5173
 ### Backend
 - Node.js + Express.js
 - TypeScript
-- In-memory data storage (mock users)
+- SQLite database with auto-seeding
 - CORS enabled
 - RESTful API design
 

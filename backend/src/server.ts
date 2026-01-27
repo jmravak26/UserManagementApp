@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
+import { dbService } from './services/database';
 
 // Load environment variables
 dotenv.config();
@@ -47,9 +48,30 @@ app.use((err: any, req: any, res: any, next: any) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📋 Health check: http://localhost:${PORT}/health`);
-  console.log(`👥 Users API: http://localhost:${PORT}/api/users`);
+// Initialize database and start server
+async function startServer() {
+  try {
+    console.log('🔄 Initializing SQLite database...');
+    await dbService.initializeDatabase();
+    console.log('✅ Database initialized successfully');
+    
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`📋 Health check: http://localhost:${PORT}/health`);
+      console.log(`👥 Users API: http://localhost:${PORT}/api/users`);
+      console.log(`🗄 Database: SQLite (database.db)`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('\n🔄 Shutting down gracefully...');
+  await dbService.disconnect();
+  process.exit(0);
 });
+
+startServer();

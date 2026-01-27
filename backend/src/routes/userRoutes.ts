@@ -1,103 +1,107 @@
 import { Router, Request, Response } from 'express';
-import { users, getNextId } from '../data/mockUsers';
+import { dbService } from '../services/database';
 import { CreateUserRequest, UpdateUserRequest, UserStatus, UserRole, User } from '../types';
 
 const router = Router();
 
 // GET /api/users - Get all users with pagination
-router.get('/', (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string) || 1;
-  const pageSize = 4; // Match your frontend PAGE_SIZE
-  
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  
-  const paginatedUsers = users.slice(startIndex, endIndex);
-  const hasMore = endIndex < users.length;
-  
-  res.json({
-    data: paginatedUsers,
-    hasMore,
-    total: users.length,
-    page,
-    pageSize
-  });
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const pageSize = 4; // Match your frontend PAGE_SIZE
+    
+    const result = await dbService.getUsers(page, pageSize);
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
 });
 
 // GET /api/users/:id - Get single user
-router.get('/:id', (req: Request, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  const user = users.find(u => u.id === id);
-  
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+router.get('/:id', async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id as string);
+    const user = await dbService.getUserById(id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Failed to fetch user' });
   }
-  
-  res.json(user);
 });
 
 // POST /api/users - Create new user
-router.post('/', (req: Request, res: Response) => {
-  const userData: CreateUserRequest = req.body;
-  
-  // Basic validation
-  if (!userData.name || !userData.username || !userData.email) {
-    return res.status(400).json({ error: 'Name, username, and email are required' });
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const userData: CreateUserRequest = req.body;
+    
+    // Basic validation
+    if (!userData.name || !userData.username || !userData.email) {
+      return res.status(400).json({ error: 'Name, username, and email are required' });
+    }
+    
+    const newUser = {
+      name: userData.name,
+      username: userData.username,
+      email: userData.email,
+      avatar: `https://i.pravatar.cc/150?u=${Date.now()}`,
+      role: userData.role || UserRole.USER,
+      birthDate: userData.birthDate,
+      phone: userData.phone,
+      status: UserStatus.ACTIVE
+    };
+    
+    const createdUser = await dbService.createUser(newUser);
+    res.status(201).json(createdUser);
+  } catch (error: any) {
+    console.error('Error creating user:', error);
+    if (error.message && error.message.includes('UNIQUE constraint failed')) {
+      res.status(400).json({ error: 'Username or email already exists' });
+    } else {
+      res.status(500).json({ error: 'Failed to create user' });
+    }
   }
-  
-  // Check if username or email already exists
-  const existingUser = users.find(u => 
-    u.username === userData.username || u.email === userData.email
-  );
-  
-  if (existingUser) {
-    return res.status(400).json({ error: 'Username or email already exists' });
-  }
-  
-  const newUser: User = {
-    id: getNextId(),
-    name: userData.name,
-    username: userData.username,
-    email: userData.email,
-    avatar: `https://i.pravatar.cc/150?u=${getNextId()}`,
-    role: userData.role || UserRole.USER,
-    birthDate: userData.birthDate,
-    phone: userData.phone,
-    status: UserStatus.ACTIVE
-  };
-  
-  users.push(newUser);
-  res.status(201).json(newUser);
 });
 
 // PUT /api/users/:id - Update user
-router.put('/:id', (req: Request, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  const updateData: UpdateUserRequest = req.body;
-  
-  const userIndex = users.findIndex(u => u.id === id);
-  
-  if (userIndex === -1) {
-    return res.status(404).json({ error: 'User not found' });
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id as string);
+    const updateData: UpdateUserRequest = req.body;
+    
+    const updatedUser = await dbService.updateUser(id, updateData);
+    res.json(updatedUser);
+  } catch (error: any) {
+    console.error('Error updating user:', error);
+    if (error.message === 'User not found') {
+      res.status(404).json({ error: 'User not found' });
+    } else if (error.message && error.message.includes('UNIQUE constraint failed')) {
+      res.status(400).json({ error: 'Username or email already exists' });
+    } else {
+      res.status(500).json({ error: 'Failed to update user' });
+    }
   }
-  
-  // Update user data
-  users[userIndex] = { ...users[userIndex], ...updateData };
-  
-  res.json(users[userIndex]);
 });
 
 // DELETE /api/users/:id - Delete user
-router.delete('/:id', (req: Request, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  const userIndex = users.findIndex(u => u.id === id);
-  
-  if (userIndex === -1) {
-    return res.status(404).json({ error: 'User not found' });
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id as string);
+    const deletedUser = await dbService.deleteUser(id);
+    res.json({ message: 'User deleted successfully', user: deletedUser });
+  } catch (error: any) {
+    console.error('Error deleting user:', error);
+    if (error.message === 'User not found') {
+      res.status(404).json({ error: 'User not found' });
+    } else {
+      res.status(500).json({ error: 'Failed to delete user' });
+    }
   }
-  
-  const deletedUser = users.splice(userIndex, 1)[0];
-  res.json({ message: 'User deleted successfully', user: deletedUser });
 });
 
 export default router;

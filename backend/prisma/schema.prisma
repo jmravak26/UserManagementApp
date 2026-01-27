@@ -1,0 +1,28 @@
+// NOTE: This schema is not currently in use
+// The app uses raw SQLite with database.ts service
+// Keep this for potential future Prisma migration
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String   @unique
+  email     String   @unique
+  avatar    String?
+  role      String
+  birthDate String
+  phone     String?
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
