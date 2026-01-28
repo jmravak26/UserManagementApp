@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import "./UserDetailModal.css";
 import type { User } from "../types/User";
 import { UserRole, UserStatus } from "../types/User";
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { updateUserThunk } from '../store/userSlice';
+import { useDatabaseMode } from '../contexts/DatabaseModeContext';
 import RoleBadge from './RoleBadge';
 
 interface UserDetailModalProps {
   user: User;
   onClose: () => void;
-  onSave?: (updatedUser: User) => void;
   canEdit?: boolean;
   onSendEmail?: (user: User) => void;
 }
@@ -17,10 +19,11 @@ const EXIT_DURATION = 200; // Must match the CSS animation duration (0.2s)
 const UserDetailModal: React.FC<UserDetailModalProps> = ({ 
   user, 
   onClose, 
-  onSave, 
   canEdit = false,
   onSendEmail
 }) => {
+  const dispatch = useAppDispatch();
+  const { mode } = useDatabaseMode();
   const [isExiting, setIsExiting] = useState(false);  
   const [isEditing, setIsEditing] = useState(false);  
   const [editedUser, setEditedUser] = useState<User>(user);
@@ -33,11 +36,18 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
     setTimeout(onClose, EXIT_DURATION);
   };
 
-  const handleSave = () => {
-    if (onSave) {
-      onSave(editedUser);
+  const handleSave = async () => {
+    try {
+      await dispatch(updateUserThunk({ 
+        id: editedUser.id, 
+        userData: editedUser, 
+        mode 
+      })).unwrap();
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to update user:', error);
+      // Handle error (could show toast notification)
     }
-    setIsEditing(false);
   };
 
   const handleCancelEdit = () => {

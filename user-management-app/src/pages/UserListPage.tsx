@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
-import { fetchUsers, addLocalUser, updateUser, resetUsers, bulkDeleteUsers, bulkUpdateUserRoles, bulkImportUsers } from '../store/userSlice';
+import { fetchUsers, resetUsers, bulkDeleteUsers, bulkUpdateUserRoles, bulkImportUsers, setCurrentMode, deleteUserThunk, createUserThunk } from '../store/userSlice';
 import { toggleUserSelection, selectAllUsers, deselectAllUsers, removeDeletedUsers } from '../store/selectionSlice';
 import { logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -44,8 +44,9 @@ const UserListPage: React.FC = () => {
   const [emailRecipients, setEmailRecipients] = useState<User[]>([]);
   const [showMessageHistory, setShowMessageHistory] = useState(false);
 
-  // Initial fetch
+  // Initial fetch and mode sync
   useEffect(() => {
+    dispatch(setCurrentMode(mode));
     dispatch(fetchUsers({ page: 1, mode }));
   }, [dispatch, mode]);
 
@@ -92,10 +93,6 @@ const UserListPage: React.FC = () => {
 
   const handleUserClick = (user: User) => setSelectedUser(user);
 
-  const handleUserUpdate = (updatedUser: User) => {
-    dispatch(updateUser(updatedUser));
-  };
-
   const handleLoadMore = () => {
     if (!loading && hasMore) {
       dispatch(fetchUsers({ page: page + 1, mode }));
@@ -115,9 +112,24 @@ const UserListPage: React.FC = () => {
     }
   };
 
-  const handleBulkDelete = () => {
-    dispatch(bulkDeleteUsers(selectedUserIds));
-    dispatch(removeDeletedUsers(selectedUserIds));
+  const handleBulkDelete = async () => {
+    if (mode === 'real') {
+      // Real mode: delete from backend
+      try {
+        await Promise.all(
+          selectedUserIds.map(id => 
+            dispatch(deleteUserThunk({ id, mode })).unwrap()
+          )
+        );
+        dispatch(removeDeletedUsers(selectedUserIds));
+      } catch (error) {
+        console.error('Failed to delete users:', error);
+      }
+    } else {
+      // Mock mode: use existing bulk delete
+      dispatch(bulkDeleteUsers(selectedUserIds));
+      dispatch(removeDeletedUsers(selectedUserIds));
+    }
   };
 
   const handleBulkRoleChange = (role: UserRole) => {
@@ -145,8 +157,25 @@ const UserListPage: React.FC = () => {
     localStorage.setItem('filterPresets', JSON.stringify(updated));
   };
 
-  const handleImportUsers = (users: User[]) => {
-    dispatch(bulkImportUsers(users));
+  const handleImportUsers = async (users: User[]) => {
+    if (mode === 'real') {
+      // Real mode: create each user in backend
+      try {
+        await Promise.all(
+          users.map(user => {
+            const { id, ...userData } = user; // Remove id for creation
+            return dispatch(createUserThunk({ userData, mode })).unwrap();
+          })
+        );
+        alert(`Successfully imported ${users.length} users to database`);
+      } catch (error) {
+        console.error('Failed to import users:', error);
+        alert('Failed to import some users. Check console for details.');
+      }
+    } else {
+      // Mock mode: use existing bulk import
+      dispatch(bulkImportUsers(users));
+    }
   };
 
   const handleSendEmail = (recipients: User[]) => {
@@ -251,17 +280,12 @@ const UserListPage: React.FC = () => {
       <AddUserModal
         open={showAdd}
         onClose={() => setShowAdd(false)}
-        onAdd={(user) => {
-          dispatch(addLocalUser(user));
-          setShowAdd(false);
-        }}
       />
 
       {selectedUser && (
         <UserDetailModal
           user={selectedUser}
           onClose={() => setSelectedUser(null)}
-          onSave={handleUserUpdate}
           canEdit={canAddUsers}
           onSendEmail={(user) => handleSendEmail([user])}
         />

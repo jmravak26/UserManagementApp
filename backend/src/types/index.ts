@@ -25,6 +25,7 @@ export interface CreateUserRequest {
   name: string;
   username: string;
   email: string;
+  avatar?: string;
   birthDate: string;
   phone?: string;
   role?: UserRole;
@@ -34,6 +35,7 @@ export interface UpdateUserRequest {
   name?: string;
   username?: string;
   email?: string;
+  avatar?: string;
   birthDate?: string;
   phone?: string;
   role?: UserRole;

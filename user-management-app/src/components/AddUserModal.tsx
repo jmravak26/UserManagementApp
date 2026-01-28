@@ -1,17 +1,52 @@
 import React from 'react';
 import AddUserForm from '../forms/AddUserForm';
-import type { User } from '../types/User';
 import { UserStatus } from '../types/User';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { createUserThunk } from '../store/userSlice';
+import { useDatabaseMode } from '../contexts/DatabaseModeContext';
 import './AddUserModal.css';
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  onAdd: (user: User) => void;
 };
 
-const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
+const AddUserModal: React.FC<Props> = ({ open, onClose }) => {
+  const dispatch = useAppDispatch();
+  const { mode } = useDatabaseMode();
+
   if (!open) return null;
+
+  const handleSubmit = async (values: any) => {
+    const userData = {
+      name: values.name,
+      username: values.username,
+      email: values.email,
+      avatar: values.avatarUrl && values.avatarUrl.trim() 
+        ? values.avatarUrl.trim() 
+        : `https://i.pravatar.cc/150?u=${Date.now()}`,
+      birthDate: values.birthDate
+        ? (() => {
+            const date = new Date(values.birthDate);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+          })()
+        : '',
+      phone: values.phone || undefined,
+      role: values.role,
+      status: UserStatus.ACTIVE
+    };
+
+    try {
+      await dispatch(createUserThunk({ userData, mode })).unwrap();
+      onClose();
+    } catch (error) {
+      console.error('Failed to create user:', error);
+      // Handle error (could show toast notification)
+    }
+  };
 
   return (
     <div className="modal-backdrop">
@@ -23,27 +58,7 @@ const AddUserModal: React.FC<Props> = ({ open, onClose, onAdd }) => {
         <div className="modal-body">
           <AddUserForm
             onCancel={onClose}
-            onSubmit={(values) => {
-              const newUser: User = {
-                id: Date.now(),
-                name: values.name,
-                username: values.username,
-                email: values.email,
-                avatar: values.avatarUrl || `https://i.pravatar.cc/150?u=${Date.now()}`,
-                birthDate: values.birthDate
-                  ? (() => {
-                      const date = new Date(values.birthDate);
-                      const day = date.getDate().toString().padStart(2, '0');
-                      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                      const year = date.getFullYear();
-                      return `${day}/${month}/${year}`;
-                    })() : '',
-                phone: values.phone || undefined,
-                role: values.role,
-                status: UserStatus.ACTIVE
-              };
-              onAdd(newUser);
-            }}
+            onSubmit={handleSubmit}
           />
         </div>
       </div>

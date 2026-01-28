@@ -49,7 +49,7 @@ router.post('/', async (req: Request, res: Response) => {
       name: userData.name,
       username: userData.username,
       email: userData.email,
-      avatar: `https://i.pravatar.cc/150?u=${Date.now()}`,
+      avatar: userData.avatar || `https://i.pravatar.cc/150?u=${Date.now()}`,
       role: userData.role || UserRole.USER,
       birthDate: userData.birthDate,
       phone: userData.phone,

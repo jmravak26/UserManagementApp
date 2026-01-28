@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UserRole, UserStatus } from '../types/User';
+import type { User } from '../types/User';
 
 type DatabaseMode = 'mock' | 'real';
 
@@ -83,4 +84,52 @@ export const getUsers = async (page = 1, mode: DatabaseMode = 'real') => {
     const res = await api.get(config.endpoint, { params: { page } });
     return res.data;
   }
+};
+
+// Create user - only works in real backend mode
+export const createUser = async (userData: Omit<User, 'id'>, mode: DatabaseMode = 'real') => {
+  if (mode === 'mock') {
+    throw new Error('Create user not supported in mock mode');
+  }
+  
+  const config = getApiConfig(mode);
+  const api = axios.create({
+    baseURL: config.baseURL,
+    timeout: 5000
+  });
+  
+  const res = await api.post(config.endpoint, userData);
+  return res.data;
+};
+
+// Update user - only works in real backend mode
+export const updateUser = async (id: number, userData: Partial<User>, mode: DatabaseMode = 'real') => {
+  if (mode === 'mock') {
+    throw new Error('Update user not supported in mock mode');
+  }
+  
+  const config = getApiConfig(mode);
+  const api = axios.create({
+    baseURL: config.baseURL,
+    timeout: 5000
+  });
+  
+  const res = await api.put(`${config.endpoint}/${id}`, userData);
+  return res.data;
+};
+
+// Delete user - only works in real backend mode
+export const deleteUser = async (id: number, mode: DatabaseMode = 'real') => {
+  if (mode === 'mock') {
+    throw new Error('Delete user not supported in mock mode');
+  }
+  
+  const config = getApiConfig(mode);
+  const api = axios.create({
+    baseURL: config.baseURL,
+    timeout: 5000
+  });
+  
+  const res = await api.delete(`${config.endpoint}/${id}`);
+  return res.data;
 };
