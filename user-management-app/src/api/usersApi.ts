@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { UserRole, UserStatus } from '../types/User';
 import type { User } from '../types/User';
+import api from './authApi'; // Use authenticated API instance
 
 type DatabaseMode = 'mock' | 'real';
 
@@ -51,14 +52,14 @@ const getApiConfig = (mode: DatabaseMode) => {
 export const getUsers = async (page = 1, mode: DatabaseMode = 'real') => {
   const config = getApiConfig(mode);
   
-  const api = axios.create({
-    baseURL: config.baseURL,
-    timeout: 5000
-  });
-
   if (mode === 'mock') {
+    const mockApi = axios.create({
+      baseURL: config.baseURL,
+      timeout: 5000
+    });
+    
     // JSONPlaceholder version
-    const res = await api.get(config.endpoint);
+    const res = await mockApi.get(config.endpoint);
     // Map API users and assign default roles and birth dates
     const allUsers = res.data.map((u: any) => ({
       id: u.id,
@@ -80,7 +81,7 @@ export const getUsers = async (page = 1, mode: DatabaseMode = 'real') => {
 
     return { data: paginated, hasMore };
   } else {
-    // Real backend version
+    // Real backend version - use authenticated API
     const res = await api.get(config.endpoint, { params: { page } });
     return res.data;
   }
@@ -92,13 +93,7 @@ export const createUser = async (userData: Omit<User, 'id'>, mode: DatabaseMode 
     throw new Error('Create user not supported in mock mode');
   }
   
-  const config = getApiConfig(mode);
-  const api = axios.create({
-    baseURL: config.baseURL,
-    timeout: 5000
-  });
-  
-  const res = await api.post(config.endpoint, userData);
+  const res = await api.post('/api/users', userData);
   return res.data;
 };
 
@@ -108,13 +103,7 @@ export const updateUser = async (id: number, userData: Partial<User>, mode: Data
     throw new Error('Update user not supported in mock mode');
   }
   
-  const config = getApiConfig(mode);
-  const api = axios.create({
-    baseURL: config.baseURL,
-    timeout: 5000
-  });
-  
-  const res = await api.put(`${config.endpoint}/${id}`, userData);
+  const res = await api.put(`/api/users/${id}`, userData);
   return res.data;
 };
 
@@ -124,12 +113,6 @@ export const deleteUser = async (id: number, mode: DatabaseMode = 'real') => {
     throw new Error('Delete user not supported in mock mode');
   }
   
-  const config = getApiConfig(mode);
-  const api = axios.create({
-    baseURL: config.baseURL,
-    timeout: 5000
-  });
-  
-  const res = await api.delete(`${config.endpoint}/${id}`);
+  const res = await api.delete(`/api/users/${id}`);
   return res.data;
 };

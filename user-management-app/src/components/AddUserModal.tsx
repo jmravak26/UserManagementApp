@@ -22,18 +22,11 @@ const AddUserModal: React.FC<Props> = ({ open, onClose }) => {
       name: values.name,
       username: values.username,
       email: values.email,
+      password: values.password,
       avatar: values.avatarUrl && values.avatarUrl.trim() 
         ? values.avatarUrl.trim() 
         : `https://i.pravatar.cc/150?u=${Date.now()}`,
-      birthDate: values.birthDate
-        ? (() => {
-            const date = new Date(values.birthDate);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-          })()
-        : '',
+      birthDate: values.birthDate || '',
       phone: values.phone || undefined,
       role: values.role,
       status: UserStatus.ACTIVE

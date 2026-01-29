@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { loginStart, loginSuccess, loginFail } from '../store/authSlice';
-import { UserRole } from '../types/User';
+import { useAppSelector } from '../hooks/useAppSelector';
+import { loginUser, clearError, mockLogin } from '../store/authSlice';
 import { useDatabaseMode } from '../contexts/DatabaseModeContext';
+import RegisterModal from '../components/RegisterModal';
 import './LoginPage.css';
-
-// Helper function to determine user role based on email
-const getUserRoleFromEmail = (email: string): UserRole => {
-  if (email.includes('admin')) return UserRole.ADMIN;
-  if (email.includes('manager')) return UserRole.MANAGER;
-  return UserRole.USER;
-};
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -24,6 +18,12 @@ const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { mode, setMode } = useDatabaseMode();
+  const { loading, error } = useAppSelector((state) => state.auth);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+  React.useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch, showRegisterModal]);
 
   return (
     <div className="login-page">
@@ -43,7 +43,7 @@ const LoginPage: React.FC = () => {
               />
               <span className="mode-label">
                 <strong>Real Backend</strong>
-                <small>Local Node.js API</small>
+                <small>Local Node.js API + SQLite database</small>
               </span>
             </label>
             <label className="mode-option">
@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
               />
               <span className="mode-label">
                 <strong>Mock Database</strong>
-                <small>JSONPlaceholder API</small>
+                <small>JSONPlaceholder API + localStorage</small>
               </span>
             </label>
           </div>
@@ -65,26 +65,45 @@ const LoginPage: React.FC = () => {
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={LoginSchema}
-          onSubmit={async (values, { setSubmitting, setFieldError }) => {
+          onSubmit={async (values, { setSubmitting }) => {
             try {
-              dispatch(loginStart());
-              const fakeToken = 'mock-token-' + Date.now();
-              const userRole = getUserRoleFromEmail(values.email);
-              
-              window.setTimeout(() => {
-                dispatch(loginSuccess({ token: fakeToken, role: userRole }));
-                setSubmitting(false);
+              if (mode === 'real') {
+                await dispatch(loginUser(values)).unwrap();
                 navigate('/users');
-              }, 600);
-            } catch (err: any) {
-              dispatch(loginFail(err.message || 'Login failed'));
-              setFieldError('email', 'Login failed');
+              } else {
+                // Mock mode - any credentials work
+                const fakeToken = 'mock-token-' + Date.now();
+                const userRole = values.email.includes('admin') ? 'Admin' : 
+                                values.email.includes('manager') ? 'Manager' : 'User';
+                
+                const mockUser = {
+                  id: 1,
+                  email: values.email,
+                  role: userRole,
+                  name: values.email.split('@')[0],
+                  username: values.email.split('@')[0],
+                  avatar: 'https://i.pravatar.cc/150?u=1'
+                };
+                
+                localStorage.setItem('authToken', fakeToken);
+                localStorage.setItem('currentUser', JSON.stringify(mockUser));
+                
+                // Update auth state for mock mode
+                dispatch(mockLogin({ token: fakeToken, user: mockUser }));
+                
+                navigate('/users');
+              }
+            } catch (error) {
+              console.error('Login failed:', error);
+            } finally {
               setSubmitting(false);
             }
           }}
         >
           {({ errors, touched, isSubmitting }) => (
             <Form className="login-form">
+              {error && <div className="error-message">{error}</div>}
+              
               <label className="label">Email</label>
               <Field name="email" type="email" className="input" />
               {errors.email && touched.email ? <div className="error">{errors.email}</div> : null}
@@ -93,19 +112,45 @@ const LoginPage: React.FC = () => {
               <Field name="password" type="password" className="input" />
               {errors.password && touched.password ? <div className="error">{errors.password}</div> : null}
 
-              <button className="btn btn-primary login-btn" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Logging...' : 'Login'}
+              <button className="btn btn-primary login-btn" type="submit" disabled={isSubmitting || loading}>
+                {isSubmitting || loading ? 'Logging in...' : 'Login'}
               </button>
+              
+              {mode === 'real' && (
+                <button 
+                  type="button" 
+                  className="btn btn-secondary register-toggle" 
+                  onClick={() => setShowRegisterModal(true)}
+                >
+                  Need an account? Register
+                </button>
+              )}
             </Form>
           )}
         </Formik>
 
+        <RegisterModal
+          open={showRegisterModal && mode === 'real'}
+          onClose={() => setShowRegisterModal(false)}
+        />
+
         <div className="hint">
-          <small>Demo credentials:</small><br/>
-          <small><strong>Admin:</strong> admin@test.com</small><br/>
-          <small><strong>Manager:</strong> manager@test.com</small><br/>
-          <small><strong>User:</strong> user@test.com</small><br/>
-          <small>Password: any</small>
+          {mode === 'real' ? (
+            <>
+              <small>Demo accounts (Real Backend):</small><br/>
+              <small><strong>Admin:</strong> admin@demo.com / admin123</small><br/>
+              <small><strong>Manager:</strong> manager@demo.com / manager123</small><br/>
+              <small><strong>User:</strong> user@demo.com / user123</small><br/>
+              <small><strong>Or register a new account above!</strong></small>
+            </>
+          ) : (
+            <>
+              <small>Mock mode - any credentials work:</small><br/>
+              <small><strong>Admin:</strong> admin@test.com / any</small><br/>
+              <small><strong>Manager:</strong> manager@test.com / any</small><br/>
+              <small><strong>User:</strong> user@test.com / any</small>
+            </>
+          )}
         </div>
       </div>
     </div>

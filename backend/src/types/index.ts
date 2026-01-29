@@ -14,6 +14,7 @@ export interface User {
   name: string;
   username: string;
   email: string;
+  password?: string; // Optional for responses (excluded for security)
   avatar?: string;
   role: UserRole;
   birthDate: string;
@@ -25,6 +26,7 @@ export interface CreateUserRequest {
   name: string;
   username: string;
   email: string;
+  password: string;
   avatar?: string;
   birthDate: string;
   phone?: string;
@@ -40,4 +42,23 @@ export interface UpdateUserRequest {
   phone?: string;
   role?: UserRole;
   status?: UserStatus;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  birthDate: string;
+  phone?: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: Omit<User, 'password'>;
 }

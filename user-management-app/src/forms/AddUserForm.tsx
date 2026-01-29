@@ -1,10 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from 'react-datepicker';
 import PhoneInput from 'react-phone-number-input';
 import { UserRole, UserStatus } from '../types/User';
-import 'react-datepicker/dist/react-datepicker.css';
 import 'react-phone-number-input/style.css';
 import './AddUserForm.css';
 
@@ -13,6 +11,7 @@ type Props = {
     name: string;
     username: string;
     email: string;
+    password: string;
     avatarUrl?: string;
     birthDate: Date | null;
     phone?: string;
@@ -27,20 +26,24 @@ const Schema = Yup.object().shape({
   name: Yup.string().required('Required'),
   username: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
-  birthDate: Yup.date().required('Required'),
+  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
+  birthDate: Yup.string().required('Required'),
   phone: Yup.string(),
   role: Yup.string().oneOf(Object.values(UserRole)).required('Role is required'),
-  status: Yup.string().oneOf(Object.values(UserStatus)).required('Status is required') // 30. Add status validation
+  status: Yup.string().oneOf(Object.values(UserStatus)).required('Status is required')
 });
 
 const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
     <Formik
-      initialValues={{ name: '', username: '', email: '', avatarUrl: '', birthDate: null, phone: '', role: UserRole.USER, status: UserStatus.ACTIVE }} // 31. Default status to Active
+      initialValues={{ name: '', username: '', email: '', password: '', avatarUrl: '', birthDate: '', phone: '', role: UserRole.USER, status: UserStatus.ACTIVE }} // 31. Default status to Active
       validationSchema={Schema}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
-          onSubmit(values);
+          onSubmit({
+            ...values,
+            birthDate: values.birthDate ? new Date(values.birthDate) : null
+          });
           setSubmitting(false);
         }, 400);
       }}
@@ -66,15 +69,15 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
           </div>
 
           <div className="form-group">
+            <label className="label">Password</label>
+            <Field name="password" type="password" className="input" />
+            <ErrorMessage name="password" component="div" className="error" />
+          </div>
+
+          <div className="form-group">
             <label className="label">Birth Date</label>
-            <DatePicker
-              selected={values.birthDate}
-              onChange={(date) => setFieldValue('birthDate', date)}
-              dateFormat="dd/MM/yyyy"
-              className="input"
-              placeholderText="Select birth date"
-            />
-            {errors.birthDate && touched.birthDate && <div className="error">{errors.birthDate}</div>}
+            <Field name="birthDate" type="date" className="input" />
+            <ErrorMessage name="birthDate" component="div" className="error" />
           </div>
 
           <div className="form-group">

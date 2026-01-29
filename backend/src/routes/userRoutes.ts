@@ -1,11 +1,13 @@
 import { Router, Request, Response } from 'express';
 import { dbService } from '../services/database';
 import { CreateUserRequest, UpdateUserRequest, UserStatus, UserRole, User } from '../types';
+import { authenticateToken } from '../middleware/auth';
+import bcrypt from 'bcryptjs';
 
 const router = Router();
 
 // GET /api/users - Get all users with pagination
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const pageSize = 4; // Match your frontend PAGE_SIZE
@@ -19,7 +21,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // GET /api/users/:id - Get single user
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', authenticateToken, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string);
     const user = await dbService.getUserById(id);
@@ -36,7 +38,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 // POST /api/users - Create new user
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     const userData: CreateUserRequest = req.body;
     
@@ -49,6 +51,7 @@ router.post('/', async (req: Request, res: Response) => {
       name: userData.name,
       username: userData.username,
       email: userData.email,
+      password: userData.password ? await bcrypt.hash(userData.password, 10) : await bcrypt.hash('defaultpass123', 10),
       avatar: userData.avatar || `https://i.pravatar.cc/150?u=${Date.now()}`,
       role: userData.role || UserRole.USER,
       birthDate: userData.birthDate,
@@ -69,7 +72,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // PUT /api/users/:id - Update user
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/:id', authenticateToken, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string);
     const updateData: UpdateUserRequest = req.body;
@@ -89,7 +92,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 });
 
 // DELETE /api/users/:id - Delete user
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', authenticateToken, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string);
     const deletedUser = await dbService.deleteUser(id);

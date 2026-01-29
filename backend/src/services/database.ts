@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { User, UserRole, UserStatus } from '../types';
+import bcrypt from 'bcryptjs';
 import path from 'path';
 
 // NOTE: Database path is currently hardcoded
@@ -18,6 +19,7 @@ export class DatabaseService {
           name TEXT NOT NULL,
           username TEXT UNIQUE NOT NULL,
           email TEXT UNIQUE NOT NULL,
+          password TEXT NOT NULL,
           avatar TEXT,
           role TEXT NOT NULL,
           birthDate TEXT NOT NULL,
@@ -50,11 +52,13 @@ export class DatabaseService {
   }
 
   private async seedDatabase(): Promise<void> {
-    const mockUsers = [
+    // Demo users with dedicated credentials
+    const demoUsers = [
       {
-        name: 'John Doe',
-        username: 'johndoe',
-        email: 'john@example.com',
+        name: 'Admin User',
+        username: 'admin',
+        email: 'admin@demo.com',
+        password: await bcrypt.hash('admin123', 10),
         avatar: 'https://i.pravatar.cc/150?u=1',
         role: UserRole.ADMIN,
         birthDate: '15/03/1990',
@@ -62,9 +66,10 @@ export class DatabaseService {
         status: UserStatus.ACTIVE
       },
       {
-        name: 'Jane Smith',
-        username: 'janesmith',
-        email: 'jane@example.com',
+        name: 'Manager User',
+        username: 'manager',
+        email: 'manager@demo.com',
+        password: await bcrypt.hash('manager123', 10),
         avatar: 'https://i.pravatar.cc/150?u=2',
         role: UserRole.MANAGER,
         birthDate: '22/07/1985',
@@ -72,99 +77,114 @@ export class DatabaseService {
         status: UserStatus.ACTIVE
       },
       {
-        name: 'Bob Johnson',
-        username: 'bobjohnson',
-        email: 'bob@example.com',
+        name: 'Regular User',
+        username: 'user',
+        email: 'user@demo.com',
+        password: await bcrypt.hash('user123', 10),
         avatar: 'https://i.pravatar.cc/150?u=3',
         role: UserRole.USER,
         birthDate: '10/12/1992',
         phone: '+1234567892',
+        status: UserStatus.ACTIVE
+      }
+    ];
+
+    // Additional mock users for testing
+    const mockUsers = [
+      {
+        name: 'John Doe',
+        username: 'johndoe',
+        email: 'john@example.com',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=4',
+        role: UserRole.ADMIN,
+        birthDate: '15/03/1990',
+        phone: '+1234567893',
+        status: UserStatus.ACTIVE
+      },
+      {
+        name: 'Jane Smith',
+        username: 'janesmith',
+        email: 'jane@example.com',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=5',
+        role: UserRole.MANAGER,
+        birthDate: '22/07/1985',
+        phone: '+1234567894',
+        status: UserStatus.ACTIVE
+      },
+      {
+        name: 'Bob Johnson',
+        username: 'bobjohnson',
+        email: 'bob@example.com',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=6',
+        role: UserRole.USER,
+        birthDate: '10/12/1992',
+        phone: '+1234567895',
         status: UserStatus.INACTIVE
       },
       {
         name: 'Alice Brown',
         username: 'alicebrown',
         email: 'alice@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=4',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=7',
         role: UserRole.USER,
         birthDate: '05/09/1988',
-        phone: '+1234567893',
+        phone: '+1234567896',
         status: UserStatus.ACTIVE
       },
       {
         name: 'Michael Chen',
         username: 'mchen',
         email: 'michael.chen@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=5',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=8',
         role: UserRole.MANAGER,
         birthDate: '18/11/1987',
-        phone: '+1234567894',
+        phone: '+1234567897',
         status: UserStatus.ACTIVE
       },
       {
         name: 'Sarah Wilson',
         username: 'swilson',
         email: 'sarah.wilson@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=6',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=9',
         role: UserRole.USER,
         birthDate: '03/06/1993',
-        phone: '+1234567895',
+        phone: '+1234567898',
         status: UserStatus.ACTIVE
       },
       {
         name: 'David Martinez',
         username: 'dmartinez',
         email: 'david.martinez@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=7',
+        password: await bcrypt.hash('password123', 10),
+        avatar: 'https://i.pravatar.cc/150?u=10',
         role: UserRole.USER,
         birthDate: '27/02/1991',
-        phone: '+1234567896',
-        status: UserStatus.INACTIVE
-      },
-      {
-        name: 'Emily Davis',
-        username: 'edavis',
-        email: 'emily.davis@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=8',
-        role: UserRole.ADMIN,
-        birthDate: '14/08/1986',
-        phone: '+1234567897',
-        status: UserStatus.ACTIVE
-      },
-      {
-        name: 'James Taylor',
-        username: 'jtaylor',
-        email: 'james.taylor@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=9',
-        role: UserRole.USER,
-        birthDate: '09/04/1994',
-        phone: '+1234567898',
-        status: UserStatus.ACTIVE
-      },
-      {
-        name: 'Lisa Anderson',
-        username: 'landerson',
-        email: 'lisa.anderson@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=10',
-        role: UserRole.MANAGER,
-        birthDate: '21/01/1989',
         phone: '+1234567899',
         status: UserStatus.INACTIVE
       }
     ];
 
+    const allUsers = [...demoUsers, ...mockUsers];
+
     return new Promise((resolve, reject) => {
       const stmt = db.prepare(`
-        INSERT INTO users (name, username, email, avatar, role, birthDate, phone, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO users (name, username, email, password, avatar, role, birthDate, phone, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
       let completed = 0;
-      mockUsers.forEach((user) => {
+      allUsers.forEach((user) => {
         stmt.run(
           user.name,
           user.username,
           user.email,
+          user.password,
           user.avatar,
           user.role,
           user.birthDate,
@@ -176,7 +196,7 @@ export class DatabaseService {
               return;
             }
             completed++;
-            if (completed === mockUsers.length) {
+            if (completed === allUsers.length) {
               stmt.finalize();
               console.log('✅ Database seeded with mock users');
               resolve();
@@ -239,14 +259,15 @@ export class DatabaseService {
   async createUser(userData: Omit<User, 'id'>): Promise<User> {
     return new Promise((resolve, reject) => {
       const stmt = db.prepare(`
-        INSERT INTO users (name, username, email, avatar, role, birthDate, phone, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO users (name, username, email, password, avatar, role, birthDate, phone, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
       stmt.run(
         userData.name,
         userData.username,
         userData.email,
+        userData.password,
         userData.avatar,
         userData.role,
         userData.birthDate,
@@ -339,6 +360,37 @@ export class DatabaseService {
         resolve();
       });
     });
+  }
+
+  // Authentication methods
+  async findUserByEmail(email: string): Promise<User | null> {
+    return new Promise((resolve, reject) => {
+      db.get('SELECT * FROM users WHERE email = ?', [email], (err: Error | null, row: any) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(row as User || null);
+      });
+    });
+  }
+
+  async createAuthUser(userData: { name: string; username: string; email: string; password: string; birthDate: string; phone?: string }): Promise<User> {
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    
+    const newUser = {
+      name: userData.name,
+      username: userData.username,
+      email: userData.email,
+      password: hashedPassword,
+      avatar: `https://i.pravatar.cc/150?u=${Date.now()}`,
+      role: UserRole.USER,
+      birthDate: userData.birthDate,
+      phone: userData.phone,
+      status: UserStatus.ACTIVE
+    };
+
+    return this.createUser(newUser);
   }
 }
 
