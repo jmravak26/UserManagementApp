@@ -2,9 +2,17 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
+// Debug logging
+console.log('🔧 API_BASE_URL:', API_BASE_URL);
+console.log('🔧 Environment:', import.meta.env.MODE);
+console.log('🔧 All env vars:', import.meta.env);
+
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 5000
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 // Add token to requests
@@ -59,8 +67,24 @@ export interface AuthResponse {
 }
 
 export const login = async (credentials: LoginRequest): Promise<AuthResponse> => {
-  const response = await api.post('/api/auth/login', credentials);
-  return response.data;
+  console.log('🚀 Attempting login to:', API_BASE_URL + '/api/auth/login');
+  console.log('📝 Credentials:', { email: credentials.email, password: '***' });
+  
+  try {
+    const response = await api.post('/api/auth/login', credentials);
+    console.log('✅ Login successful:', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Login failed:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      url: error.config?.url,
+      baseURL: error.config?.baseURL
+    });
+    throw error;
+  }
 };
 
 export const register = async (userData: RegisterRequest): Promise<AuthResponse> => {
