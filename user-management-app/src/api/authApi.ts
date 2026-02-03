@@ -2,7 +2,14 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
   (import.meta.env.MODE === 'production' ? 'https://usermanagementapp-production.up.railway.app' : 'http://localhost:3001');
-console.log('🔧 All env vars:', import.meta.env);
+
+// Debugging logs for development mode
+if (import.meta.env.MODE === 'development') {
+  console.log('⚙️ API Base URL:', API_BASE_URL);
+  console.log('🛠 Environment Mode:', import.meta.env.MODE);
+  console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+  console.log('🔧 All env vars:', import.meta.env);
+}
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -64,22 +71,28 @@ export interface AuthResponse {
 }
 
 export const login = async (credentials: LoginRequest): Promise<AuthResponse> => {
-  console.log('🚀 Attempting login to:', API_BASE_URL + '/api/auth/login');
-  console.log('📝 Credentials:', { email: credentials.email, password: '***' });
+  if (import.meta.env.MODE === 'development') {
+    console.log('🚀 Attempting login to:', API_BASE_URL + '/api/auth/login');
+    console.log('📝 Credentials:', { email: credentials.email, password: '***' });
+  }
   
   try {
     const response = await api.post('/api/auth/login', credentials);
-    console.log('✅ Login successful:', response.data);
+    if (import.meta.env.MODE === 'development') {
+      console.log('✅ Login successful:', response.data);
+    }
     return response.data;
   } catch (error: any) {
-    console.error('❌ Login failed:', {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      url: error.config?.url,
-      baseURL: error.config?.baseURL
-    });
+    if (import.meta.env.MODE === 'development') {
+      console.error('❌ Login failed:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL
+      });
+    }
     throw error;
   }
 };
