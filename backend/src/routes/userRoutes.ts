@@ -47,6 +47,16 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Name, username, and email are required' });
     }
     
+    // Format birthDate to DD/MM/YYYY format to match seeded data
+    let formattedBirthDate = userData.birthDate;
+    if (userData.birthDate) {
+      const date = new Date(userData.birthDate);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      formattedBirthDate = `${day}/${month}/${year}`;
+    }
+    
     const newUser = {
       name: userData.name,
       username: userData.username,
@@ -54,7 +64,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
       password: userData.password ? await bcrypt.hash(userData.password, 10) : await bcrypt.hash('defaultpass123', 10),
       avatar: userData.avatar || `https://i.pravatar.cc/150?u=${Date.now()}`,
       role: userData.role || UserRole.USER,
-      birthDate: userData.birthDate,
+      birthDate: formattedBirthDate,
       phone: userData.phone,
       status: UserStatus.ACTIVE
     };
@@ -76,6 +86,15 @@ router.put('/:id', authenticateToken, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string);
     const updateData: UpdateUserRequest = req.body;
+    
+    // Format birthDate to DD/MM/YYYY format if provided
+    if (updateData.birthDate) {
+      const date = new Date(updateData.birthDate);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      updateData.birthDate = `${day}/${month}/${year}`;
+    }
     
     const updatedUser = await dbService.updateUser(id, updateData);
     res.json(updatedUser);

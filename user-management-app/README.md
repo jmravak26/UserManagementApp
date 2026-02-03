@@ -1,88 +1,190 @@
-#frontend-task<br>
-**User management app**
+# User Management Frontend
 
-***Description:***<br>
-User management app will have list of users with search and add functionalities.
+Modern React application with TypeScript, Redux Toolkit, and comprehensive user management features.
 
-***Task:***<br>
-Your task is to build a simple user management app using React and following 
-libraries:
-- Use redux for state management
-- Use redux-thunk or redux-saga for async operations
-- Use one of the following libraries for form handling: formik, final-form (react
-final-form) or redux-form
-- Use prop-types for each component (OBSOLETE -> removed props in later app versions)
-- Use axios or fetch for API communication
+## 🚀 Live Demo
 
-***Requirements:***
-- Login screen should contain simple login form (email + password). Upon 
-successful login you should be redirected to user list screen.
-- User list screen should connect to the API, get users list and display it. Users 
-list should be in the GRID view. Each view should contain name, username, email and avatar.
-- User list screen should have search bar. Search bar should do automatic 
-filtering of the users in the list. This filtering should start after at least 2 
-characters are entered in the search bar.
-- User list screen should have an add form. Screen should have “+add user” 
-button. Upon clicking on it, add form modal should be shown. It contains 
-fields: full name, username, email, avatar URL.
-- Bonus task: add form could have image “upload” functionality - just a dummy 
-one, with an option to resize the image. (This image doesn’t need to be 
-uploaded anywhere, and user can have some dummy URL for the avatar)
+**Production**: [https://react-usr-mgmt-app.web.app](https://react-usr-mgmt-app.web.app)
 
-***Additional resources:***
-- You can use the following API for data: https://jsonplaceholder.typicode.com/
-- Use any image for the default avatar URL (used for adding new users): https://i.pravatar.cc
+## ⚡ Quick Start
 
-# User Management App - Starter
-## Tech choices
-- **Build tool:**       Vite + React + TypeScript.
-- **State mgmt:**       Redux Toolkit + redux-thunk. _Can be replaced with commonly used React Hooks_
-- **API calls:**        Axios. _Can be replaced with fetch API_
-- **Forms:**            Formik.
-- **Prop validation:**  TypeScript provides compile-time type safety (PropTypes removed as redundant)
-- **Styles:**           Plain CSS files per component (for learning clarity). _Can be replaced with commonly used TailWind CSS_
-- **Routing:**          React Router.
-- **Login:**            Mock login (no real API call).
-
-## Notes / Design decisions
-- TypeScript chosen to increase code safety and provide excellent IDE support with autocomplete and type checking.
-- Redux Toolkit provides concise reducers and includes good defaults. Thunks are used for async fetch (simple and expected by the task).
-- Axios for simple HTTP helper; users data is fetched from https://jsonplaceholder.typicode.com/
-- Mock login keeps the flow simple; the login stores a client-side token in Redux and protects the /users route.
-
-## How to run
 ```bash
 npm install
 npm run dev
-# open http://localhost:5173
+# Open http://localhost:5173
 ```
 
-## Backend Integration
+## 🔑 Demo Credentials
 
-This frontend is ready for backend integration:
-- **API Documentation:** See [API_DOCUMENTATION.md](./txtNotes/backEndPreparationDetails/API_DOCUMENTATION.md)
-- **Backend Setup Guide:** See [BACKEND_GUIDE.md](./txtNotes/backEndPreparationDetails/BACKEND_GUIDE.md)
-- **Migration Guide:** See [MIGRATION_GUIDE.md](./txtNotes/backEndPreparationDetails/MIGRATION_GUIDE.md)
+- **Admin**: `admin@demo.com` / `admin123`
+- **Manager**: `manager@demo.com` / `manager123`
+- **User**: `user@demo.com` / `user123`
 
-To connect to a real backend, update `.env`:
+## 🛠️ Tech Stack
+
+- **Build Tool**: Vite + React 19 + TypeScript
+- **State Management**: Redux Toolkit + Redux Thunk
+- **Routing**: React Router v7
+- **Forms**: Formik + Yup validation
+- **HTTP Client**: Axios
+- **Styling**: CSS3 with responsive design
+- **Date Picker**: React DatePicker
+- **Phone Input**: React Phone Number Input
+- **CSV Processing**: PapaParse
+
+## 🎯 Features
+
+### Core Features
+- ✅ **Authentication**: JWT-based login/register with role-based access
+- ✅ **User Management**: Full CRUD operations with pagination
+- ✅ **Real-time Search**: Instant user filtering (2+ characters)
+- ✅ **Responsive Design**: Mobile-first approach
+- ✅ **Database Mode Toggle**: Switch between real backend and mock data
+
+### Advanced Features
+- ✅ **Bulk Operations**: Multi-select, bulk delete, role changes
+- ✅ **Data Export/Import**: CSV import/export functionality
+- ✅ **Advanced Filtering**: Role, status, date range filters with presets
+- ✅ **Communication**: Email users, message history tracking
+- ✅ **Analytics Dashboard**: User statistics and insights
+- ✅ **User Profiles**: Detailed user information with avatars
+
+## 📁 Project Structure
+
+```
+src/
+├── api/                    # API layer (axios)
+│   ├── authApi.ts          # Authentication endpoints
+│   └── usersApi.ts         # User CRUD endpoints
+├── components/             # Reusable UI components
+│   ├── AddUserModal.tsx    # User creation modal
+│   ├── BulkActionsToolbar.tsx # Bulk operations
+│   ├── FilterSortPanel.tsx # Advanced filtering
+│   ├── ImportPanel.tsx     # CSV import functionality
+│   ├── EmailModal.tsx      # Email communication
+│   ├── SearchBar.tsx       # Real-time search
+│   ├── UserCard.tsx        # User display component
+│   └── ...                 # Other components
+├── contexts/               # React contexts
+│   └── DatabaseModeContext.tsx # Database mode switching
+├── forms/                  # Form components
+│   └── AddUserForm.tsx     # User creation form
+├── hooks/                  # Custom React hooks
+│   ├── useAppDispatch.ts   # Typed Redux dispatch
+│   └── useAppSelector.ts   # Typed Redux selector
+├── pages/                  # Page components
+│   ├── AnalyticsPage.tsx   # User analytics dashboard
+│   ├── LoginPage.tsx       # Authentication page
+│   └── UserListPage.tsx    # Main user management page
+├── store/                  # Redux store
+│   ├── authSlice.ts        # Authentication state
+│   ├── userSlice.ts        # User management state
+│   ├── messageSlice.ts     # Message history state
+│   ├── selectionSlice.ts   # Bulk selection state
+│   └── index.ts            # Store configuration
+├── types/                  # TypeScript definitions
+│   ├── User.ts             # User type definitions
+│   └── Message.ts          # Message type definitions
+├── utils/                  # Utility functions
+│   ├── csvExport.ts        # CSV export functionality
+│   ├── csvImport.ts        # CSV import functionality
+│   └── printDirectory.ts   # Print utilities
+├── App.tsx                 # Main app component
+└── main.tsx                # App entry point
+```
+
+## 🔧 Environment Configuration
+
+### Development (.env)
+```env
+VITE_API_BASE_URL=http://localhost:3001
+```
+
+### Production
+Environment variables are automatically configured for production deployment.
+
+## 📊 Scripts
+
+- `npm run dev` - Development server with hot reload
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## 🚀 Deployment
+
+### Firebase Hosting (Current)
+- **Auto-deployment**: GitHub Actions on push to `main`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist/`
+- **Configuration**: `firebase.json`
+
+### Manual Deployment
 ```bash
-VITE_API_BASE_URL=http://localhost:3000/api
+npm run build
+# Deploy dist/ folder to your hosting provider
 ```
 
-## Screenshots of User management app
-**Note:** The pictures provided below display the initial working app. All further feature implementations (such as user editing, detailed user modals, enhanced status management, etc.) are not displayed in these screenshots.
+## 📱 Database Mode Switching
 
-***Login Screen***<br>
-![LoginScreen](./assets/LoginScreen.png)
+The app supports two data sources:
 
-***Users Screen***<br>
-![UsersScreen](./assets/UsersScreen.png)
+1. **Real Backend Mode**
+   - Uses local/deployed Node.js API
+   - Full authentication and CRUD operations
+   - Persistent data storage
 
-***Add User Screen***<br>
-![AddUserScreen](./assets/AddUserScreen.png)
+2. **Mock Database Mode**
+   - Uses JSONPlaceholder API
+   - Demo purposes only
+   - No authentication required
 
-***Add and Filter User Screen***<br>
-![AddFilterUserScreen](./assets/AddFilterUserScreen.png)
+Switch modes on the login page. Your preference is saved in localStorage.
 
-***Logout Button Included Screen***<br>
-![LogoutButtonIncluded](./assets/LogoutButtonIncluded.png)
+## 📸 Screenshots
+
+### Login Screen
+![Login Screen](./assets/LoginScreen.png)
+
+### Users Management
+![Users Screen](./assets/UsersScreen.png)
+
+### Add User Modal
+![Add User Screen](./assets/AddUserScreen.png)
+
+### Advanced Filtering
+![Filter User Screen](./assets/AddFilterUserScreen.png)
+
+### User Interface
+![Logout Button](./assets/LogoutButtonIncluded.png)
+
+## 🔍 Development
+
+### Adding New Features
+1. Create components in `src/components/`
+2. Add Redux slices in `src/store/`
+3. Define types in `src/types/`
+4. Add API calls in `src/api/`
+5. Create pages in `src/pages/`
+
+### State Management
+- **Redux Toolkit**: Simplified Redux with good defaults
+- **Redux Thunk**: Async operations
+- **Typed Hooks**: `useAppDispatch` and `useAppSelector`
+
+### Form Handling
+- **Formik**: Form state management
+- **Yup**: Schema validation
+- **TypeScript**: Compile-time type safety
+
+## 🤝 Backend Integration
+
+This frontend is designed to work with the Node.js backend in the `../backend/` directory.
+
+**API Documentation**: See `../txtNotes/backEndPreparationDetails/API_DOCUMENTATION.md`
+
+## 📝 Notes
+
+- **TypeScript**: Provides compile-time type safety and excellent IDE support
+- **Redux Toolkit**: Includes good defaults and reduces boilerplate
+- **Responsive Design**: Mobile-first approach with CSS Grid and Flexbox
+- **Performance**: Optimized with React 19 and Vite's fast build system
