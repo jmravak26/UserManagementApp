@@ -37,9 +37,24 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       health: '/health',
-      users: '/api/users'
+      users: '/api/users',
+      database: '/api/database'
     }
   });
+});
+
+// Database viewer endpoint (for development/debugging)
+app.get('/api/database', async (req, res) => {
+  try {
+    const users = await dbService.getUsers(1, 100); // Get first 100 users
+    res.json({
+      message: 'Database Contents',
+      totalUsers: users.total,
+      users: users.data
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch database contents' });
+  }
 });
 
 // API Routes
@@ -60,9 +75,15 @@ async function startServer() {
     console.log('✅ Database initialized successfully');
     
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(`📋 Health check: http://localhost:${PORT}/health`);
-      console.log(`👥 Users API: http://localhost:${PORT}/api/users`);
+      const isProduction = process.env.NODE_ENV === 'production';
+      const baseUrl = isProduction 
+        ? 'https://usermanagementapp-production.up.railway.app'
+        : `http://localhost:${PORT}`;
+      
+      console.log(`🚀 Server running on ${baseUrl}`);
+      console.log(`📋 Health check: ${baseUrl}/health`);
+      console.log(`👥 Users API: ${baseUrl}/api/users`);
+      console.log(`🗄 Database viewer: ${baseUrl}/api/database`);
       console.log(`🗄 Database: SQLite (database.db)`);
     });
   } catch (error) {
