@@ -32,17 +32,24 @@ export const fetchUsers = createAsyncThunk('users/fetch', async ({ page = 1, mod
 });
 
 // Create user thunk
-export const createUserThunk = createAsyncThunk('users/create', async ({ userData, mode }: { userData: Omit<User, 'id'>, mode: 'mock' | 'real' }) => {
-  if (mode === 'real') {
-    const newUser = await createUser(userData, mode);
-    return { user: newUser, mode };
-  } else {
-    // Mock mode - generate local ID and return user
-    const localId = Date.now();
-    const newUser = { ...userData, id: localId };
-    return { user: newUser, mode };
+export const createUserThunk = createAsyncThunk(
+  'users/create',
+  async ({ userData, mode }: { userData: Omit<User, 'id'>, mode: 'mock' | 'real' }, { rejectWithValue }) => {
+    try {
+      if (mode === 'real') {
+        const newUser = await createUser(userData, mode);
+        return { user: newUser, mode };
+      } else {
+        const localId = Date.now();
+        const newUser = { ...userData, id: localId };
+        return { user: newUser, mode };
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.error || error?.message || 'Failed to create user';
+      return rejectWithValue(message);
+    }
   }
-});
+);
 
 // Update user thunk
 export const updateUserThunk = createAsyncThunk('users/update', async ({ id, userData, mode }: { id: number, userData: Partial<User>, mode: 'mock' | 'real' }) => {

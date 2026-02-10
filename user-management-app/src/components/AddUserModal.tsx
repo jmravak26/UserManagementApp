@@ -14,10 +14,12 @@ type Props = {
 const AddUserModal: React.FC<Props> = ({ open, onClose }) => {
   const dispatch = useAppDispatch();
   const { mode } = useDatabaseMode();
+  const [error, setError] = React.useState<string | null>(null);
 
   if (!open) return null;
 
   const handleSubmit = async (values: any) => {
+    setError(null);
     const userData = {
       name: values.name,
       username: values.username,
@@ -35,9 +37,8 @@ const AddUserModal: React.FC<Props> = ({ open, onClose }) => {
     try {
       await dispatch(createUserThunk({ userData, mode })).unwrap();
       onClose();
-    } catch (error) {
-      console.error('Failed to create user:', error);
-      // Handle error (could show toast notification)
+    } catch (error: any) {
+      setError(error);
     }
   };
 
@@ -52,6 +53,7 @@ const AddUserModal: React.FC<Props> = ({ open, onClose }) => {
           <AddUserForm
             onCancel={onClose}
             onSubmit={handleSubmit}
+            error={error}
           />
         </div>
       </div>

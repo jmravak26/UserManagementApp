@@ -1,10 +1,12 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import PhoneInput from 'react-phone-number-input';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
 import { registerUser } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
+import 'react-phone-number-input/style.css';
 import './RegisterModal.css';
 
 const RegisterSchema = Yup.object().shape({
@@ -63,7 +65,7 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
             validationSchema={RegisterSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
+            {({ values, setFieldValue, isSubmitting }) => (
               <Form className="register-form">
                 {error && <div className="error-message">{error}</div>}
                 
@@ -104,8 +106,14 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
                 
                 <div className="form-group">
-                  <label className="label">Phone (optional)</label>
-                  <Field name="phone" className="input" />
+                  <label className="label">Phone Number (optional)</label>
+                  <PhoneInput
+                    placeholder="Enter phone number"
+                    value={values.phone}
+                    onChange={(value) => setFieldValue('phone', value || '')}
+                    defaultCountry="HR"
+                    className="phone-input"
+                  />
                 </div>
                 
                 <div className="form-actions">

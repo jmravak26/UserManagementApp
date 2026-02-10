@@ -19,6 +19,7 @@ type Props = {
     status: UserStatus;
   }) => void;
   onCancel?: () => void;
+  error?: string | null;
 };
 
 // Validation schema including role validation
@@ -36,7 +37,7 @@ const Schema = Yup.object().shape({
   status: Yup.string().oneOf(Object.values(UserStatus)).required('Status is required')
 });
 
-const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel, error }) => {
   return (
     <Formik
       initialValues={{ name: '', username: '', email: '', password: '', confirmPassword: '', avatarUrl: '', birthDate: '', phone: '', role: UserRole.USER, status: UserStatus.ACTIVE }}
@@ -133,6 +134,19 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               {isSubmitting ? 'Adding...' : 'Add user'}
             </button>
           </div>
+
+          {error && (
+            <div style={{ 
+              marginTop: '1rem', 
+              padding: '0.75rem', 
+              backgroundColor: '#fee2e2', 
+              color: '#991b1b', 
+              borderRadius: '4px',
+              border: '1px solid #fca5a5'
+            }}>
+              {error}
+            </div>
+          )}
         </Form>
       )}
     </Formik>
