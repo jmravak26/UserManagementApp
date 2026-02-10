@@ -27,6 +27,9 @@ const Schema = Yup.object().shape({
   username: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Please confirm your password'),
   birthDate: Yup.string().required('Required'),
   phone: Yup.string(),
   role: Yup.string().oneOf(Object.values(UserRole)).required('Role is required'),
@@ -36,7 +39,7 @@ const Schema = Yup.object().shape({
 const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
     <Formik
-      initialValues={{ name: '', username: '', email: '', password: '', avatarUrl: '', birthDate: '', phone: '', role: UserRole.USER, status: UserStatus.ACTIVE }} // 31. Default status to Active
+      initialValues={{ name: '', username: '', email: '', password: '', confirmPassword: '', avatarUrl: '', birthDate: '', phone: '', role: UserRole.USER, status: UserStatus.ACTIVE }}
       validationSchema={Schema}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
@@ -72,6 +75,12 @@ const AddUserForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             <label className="label">Password</label>
             <Field name="password" type="password" className="input" />
             <ErrorMessage name="password" component="div" className="error" />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Confirm Password</label>
+            <Field name="confirmPassword" type="password" className="input" />
+            <ErrorMessage name="confirmPassword" component="div" className="error" />
           </div>
 
           <div className="form-group">

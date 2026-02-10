@@ -12,6 +12,9 @@ const RegisterSchema = Yup.object().shape({
   username: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Please confirm your password'),
   birthDate: Yup.string().required('Required')
 });
 
@@ -56,7 +59,7 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
         </div>
         <div className="modal-body">
           <Formik
-            initialValues={{ name: '', username: '', email: '', password: '', birthDate: '', phone: '' }}
+            initialValues={{ name: '', username: '', email: '', password: '', confirmPassword: '', birthDate: '', phone: '' }}
             validationSchema={RegisterSchema}
             onSubmit={handleSubmit}
           >
@@ -86,6 +89,12 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
                   <label className="label">Password</label>
                   <Field name="password" type="password" className="input" />
                   <ErrorMessage name="password" component="div" className="error" />
+                </div>
+                
+                <div className="form-group">
+                  <label className="label">Confirm Password</label>
+                  <Field name="confirmPassword" type="password" className="input" />
+                  <ErrorMessage name="confirmPassword" component="div" className="error" />
                 </div>
                 
                 <div className="form-group">
