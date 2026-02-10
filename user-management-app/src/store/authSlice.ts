@@ -16,11 +16,16 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: RegisterRequest) => {
-    const response = await register(userData);
-    localStorage.setItem('authToken', response.token);
-    localStorage.setItem('currentUser', JSON.stringify(response.user));
-    return response;
+  async (userData: RegisterRequest, { rejectWithValue }) => {
+    try {
+      const response = await register(userData);
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('currentUser', JSON.stringify(response.user));
+      return response;
+    } catch (error: any) {
+      const message = error?.response?.data?.error || error?.message || 'Registration failed';
+      return rejectWithValue(message);
+    }
   }
 );
 
@@ -137,7 +142,7 @@ const authSlice = createSlice({
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message || 'Registration failed';
+      state.error = typeof action.payload === 'string' ? action.payload : (action.error.message || 'Registration failed');
     });
 
     // Load stored auth

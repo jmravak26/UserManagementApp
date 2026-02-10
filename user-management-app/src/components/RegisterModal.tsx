@@ -28,7 +28,7 @@ type Props = {
 const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useAppSelector((state) => state.auth);
+  const { loading } = useAppSelector((state) => state.auth);
 
   if (!open) return null;
 
@@ -37,8 +37,9 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
       await dispatch(registerUser(values)).unwrap();
       onClose();
       navigate('/users');
-    } catch (error) {
-      console.error('Registration failed:', error);
+    } catch (error: any) {
+      const errorMessage = typeof error === 'string' ? error : (error?.message || 'Registration failed');
+      alert(errorMessage);
     }
   };
 
@@ -67,7 +68,6 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
           >
             {({ values, setFieldValue, isSubmitting }) => (
               <Form className="register-form">
-                {error && <div className="error-message">{error}</div>}
                 
                 <div className="form-group">
                   <label className="label">Full Name</label>

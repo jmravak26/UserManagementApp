@@ -70,6 +70,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
     };
     
     const createdUser = await dbService.createUser(newUser);
+    console.log(`✅ User created successfully: ${createdUser.username} (${createdUser.email})`);
     res.status(201).json(createdUser);
   } catch (error: any) {
     console.error('Error creating user:', error);

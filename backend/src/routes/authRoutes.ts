@@ -104,6 +104,7 @@ router.post('/register', async (req: Request, res: Response) => {
       user: userWithoutPassword
     };
 
+    console.log(`✅ User registered successfully: ${newUser.username} (${newUser.email})`);
     res.status(201).json(response);
   } catch (error: any) {
     console.error('Registration error:', error);
